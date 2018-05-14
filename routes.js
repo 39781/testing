@@ -4,7 +4,7 @@ var request			= require('request');
 var fs 				= require("fs");	
 var request			= require('request');
 var path			= require("path");	
-
+var config			= require('./config');	
 
 
 //var Authentication = require('./utilities/Authentication');
@@ -18,10 +18,10 @@ router.get('/', function(req, res) {
 
 
 
-router.post('/botHandler',/*Authentication.SetRealm('botHandler'), Authentication.BasicAuthentication, */function(req, res){
+router.post('/botHandler',function(req, res){
 	
 	console.log('req received');
-	console.log(req.body);
+	console.log(JSON.stringify(req.body));
 	var resp = {
     "conversationToken": "",
     "expectUserResponse": true,
@@ -50,16 +50,34 @@ router.post('/botHandler',/*Authentication.SetRealm('botHandler'), Authenticatio
 }
 	res.json(resp).end();
 });
-router.post('/botHandler2',/*Authentication.SetRealm('botHandler'), Authentication.BasicAuthentication, */function(req, res){
-	
-	console.log('req received to botHandler2');
-	var resp = {						
+
+router.post('/dialogflowAPI',function(req, res){
+	var options = { 
+		method: 'POST',
+		url: config.dialogflowAPI,
+		headers: {
+			"Authorization": "Bearer " + config.accessToken
+		},
+		body:req.body,			
+		json: true 
+	}; 			
+	request(options, function (error, response, body) {
+		if(error){
+			res.json({error:"error in chat server api call"}).end();
+		}else{		
+			getIntent(body)
+			.then((resp)=>{
+				res.json(resp).end();
+			})
+			.catch((err)=>{
+				res.json(err).end();
+			})	
 			
-				"speech": "its me",
-				"text": "its me"
-			}
-	res.json(resp).end();
-});
+
+		}		
+	});			
+})
+
 module.exports = router;
 
 

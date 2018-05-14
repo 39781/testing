@@ -22,7 +22,16 @@ router.post('/botHandler',function(req, res){
 	
 	console.log('req received');
 	console.log(JSON.stringify(req.body));
-	var resp = {
+	req.body.inputs.forEach(function(input){
+		if(input.intent == 'action.intent.TEXT'){
+			dialogflowAPI(rawInputs[0].query)
+			.then(function(resp){
+				console.log(JSON.stringify(resp));
+				res.json(resp).end();
+			})
+		}
+	})
+	/*var resp = {
     "conversationToken": "",
     "expectUserResponse": true,
     "expectedInputs": [
@@ -47,36 +56,33 @@ router.post('/botHandler',function(req, res){
             ]
         }
     ]
-}
-	res.json(resp).end();
+}*/
+	
 });
 
-router.post('/dialogflowAPI',function(req, res){
-	var options = { 
-		method: 'POST',
-		url: config.dialogflowAPI,
-		headers: {
-			"Authorization": "Bearer " + config.accessToken
-		},
-		body:req.body,			
-		json: true 
-	}; 			
-	request(options, function (error, response, body) {
-		if(error){
-			res.json({error:"error in chat server api call"}).end();
-		}else{		
-			getIntent(body)
-			.then((resp)=>{
-				res.json(resp).end();
-			})
-			.catch((err)=>{
-				res.json(err).end();
-			})	
-			
-
-		}		
-	});			
-})
+var dialogflowAPI = function(input){
+	
+	return new Promise(function(resolve, reject){
+		var options = { 
+			method: 'POST',
+			url: config.dialogflowAPI,
+			headers: {
+				"Authorization": "Bearer " + config.accessToken
+			},
+			body:{
+				query:input
+			},			
+			json: true 
+		}; 			
+		request(options, function (error, response, body) {
+			if(error){
+				res.json({error:"error in chat server api call"}).end();
+			}else{						
+				resolve(body);
+			}		
+		});			
+	});
+}
 
 module.exports = router;
 

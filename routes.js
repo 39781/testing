@@ -5,7 +5,7 @@ var fs 				= require("fs");
 var request			= require('request');
 var path			= require("path");	
 var config			= require('./config');	
-
+const uuidv1 		= require('uuid/v1');
 
 //var Authentication = require('./utilities/Authentication');
 
@@ -26,7 +26,7 @@ router.post('/botHandler',function(req, res){
 	for(i=0; i<len; i++){		
 		console.log(req.body.inputs[i].intent);
 		if(req.body.inputs[i].intent == 'actions.intent.TEXT'){
-			dialogflowAPI(rawInputs[0].query)
+			dialogflowAPI(req.body.inputs[i].rawInputs[0].query)
 			.then(function(resp){
 				console.log(JSON.stringify(resp));
 				res.json(resp).end();
@@ -77,14 +77,18 @@ var dialogflowAPI = function(input){
 				"Authorization": "Bearer " + config.accessToken
 			},
 			body:{
+				sessionId: uuidv1(),
+				lang: "en",
 				query:input
 			},			
 			json: true 
 		}; 			
+		console.log(options);
 		request(options, function (error, response, body) {
 			if(error){
 				res.json({error:"error in chat server api call"}).end();
-			}else{						
+			}else{							
+				console.log(body);
 				resolve(body);
 			}		
 		});			

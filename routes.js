@@ -28,8 +28,8 @@ router.post('/botHandler2',/*Authentication.SetRealm('botHandler'), Authenticati
 	console.log('req received to botHandler2');
 	var resp = {						
 			
-				"textToSpeech": "its me",
-				"ssml": "its me"
+				"speech": "its me",
+				"text": "its me"
 			}
 	res.json(resp).end();
 });

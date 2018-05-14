@@ -28,38 +28,18 @@ router.post('/botHandler',function(req, res){
 		if(req.body.inputs[i].intent == 'actions.intent.TEXT'){
 			dialogflowAPI(req.body.inputs[i].rawInputs[0].query)
 			.then(function(resp){
-				console.log(JSON.stringify(resp));
-				res.json(resp).end();
+				console.log(JSON.stringify(resp.result.fulfillment));
+				resp.result.fulfillment.messages.forEach(function(message){
+							
+					if(message.platform=='google'&&message.type=="simple_response"){
+						res.json(simpleResponse(message.textToSpeech)).end();
+					}					
+				})
+				
 			})
 			break;
-		}else if(req.body.inputs[i].intent == 'actions.intent.MAIN'){
-			var resp = {
-				"conversationToken": "",
-				"expectUserResponse": true,
-				"expectedInputs": [
-					{
-						"inputPrompt": {
-							"richInitialPrompt": {
-								"items": [
-									{
-										"simpleResponse": {
-											"textToSpeech": " Hai , I am PL. Hari, What can I do for you",
-											"displayText": "Hai , I am PL. Hari, What can I do for you"
-										}
-									}
-								],
-								"suggestions": []
-							}
-						},
-						"possibleIntents": [
-							{
-								"intent": "actions.intent.TEXT"
-							}
-						]
-					}
-				]
-			};
-			res.json(resp).end();
+		}else if(req.body.inputs[i].intent == 'actions.intent.MAIN'){			
+			res.json(simpleResponse("Hai , I am PL. Hari, What can I do for you")).end();
 			break;
 		}
 	}
@@ -87,14 +67,41 @@ var dialogflowAPI = function(input){
 		request(options, function (error, response, body) {
 			if(error){
 				res.json({error:"error in chat server api call"}).end();
-			}else{							
-				console.log(body);
+			}else{											
 				resolve(body);
 			}		
 		});			
 	});
 }
-
+var simpleResponse = function(responseText){
+	console.log(responseText);
+	return {
+				"conversationToken": "",
+				"expectUserResponse": true,
+				"expectedInputs": [
+					{
+						"inputPrompt": {
+							"richInitialPrompt": {
+								"items": [
+									{
+										"simpleResponse": {
+											"textToSpeech": responseText,
+											"displayText": responseText
+										}
+									}
+								],
+								"suggestions": []
+							}
+						},
+						"possibleIntents": [
+							{
+								"intent": "actions.intent.TEXT"
+							}
+						]
+					}
+				]
+			};
+}
 module.exports = router;
 
 

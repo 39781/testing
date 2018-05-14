@@ -21,6 +21,7 @@ router.get('/', function(req, res) {
 router.post('/botHandler',/*Authentication.SetRealm('botHandler'), Authentication.BasicAuthentication, */function(req, res){
 	
 	console.log('req received');
+	console.log(req.body);
 	var resp = {
     "conversationToken": "",
     "expectUserResponse": true,

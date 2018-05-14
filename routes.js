@@ -23,6 +23,11 @@ router.post('/botHandler',/*Authentication.SetRealm('botHandler'), Authenticatio
 	console.log('req received');
 	res.end();
 });
+router.post('/botHandler2',/*Authentication.SetRealm('botHandler'), Authentication.BasicAuthentication, */function(req, res){
+	
+	console.log('req received to botHandler2');
+	res.end();
+});
 module.exports = router;
 
 

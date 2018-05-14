@@ -4,8 +4,8 @@ var request			= require('request');
 var fs 				= require("fs");	
 var request			= require('request');
 var path			= require("path");	
-var config 			= require("./config");	
-var mail			= require('./utilities/mail');	
+
+
 
 //var Authentication = require('./utilities/Authentication');
 

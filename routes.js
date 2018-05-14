@@ -24,14 +24,15 @@ router.post('/botHandler',function(req, res){
 	console.log(JSON.stringify(req.body));
 	var len = req.body.inputs.length;
 	for(i=0; i<len; i++){		
-		if(req.body.inputs[i].intent == 'action.intent.TEXT'){
+		console.log(req.body.inputs[i].intent);
+		if(req.body.inputs[i].intent == 'actions.intent.TEXT'){
 			dialogflowAPI(rawInputs[0].query)
 			.then(function(resp){
 				console.log(JSON.stringify(resp));
 				res.json(resp).end();
 			})
 			break;
-		}else if(req.body.inputs[i].intent == 'action.intent.MAIN'){
+		}else if(req.body.inputs[i].intent == 'actions.intent.MAIN'){
 			var resp = {
 				"conversationToken": "",
 				"expectUserResponse": true,

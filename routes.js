@@ -26,7 +26,21 @@ router.post('/botHandler',/*Authentication.SetRealm('botHandler'), Authenticatio
 router.post('/botHandler2',/*Authentication.SetRealm('botHandler'), Authentication.BasicAuthentication, */function(req, res){
 	
 	console.log('req received to botHandler2');
-	res.end();
+	var resp = {			
+			"speech": "",			
+			"messages": [{
+				"type": "simple_response",
+				"platform": "google",
+				"textToSpeech": "its me",
+				"displayText": "its me"
+			},
+			{
+			  "type": 0,
+			  "speech": ""
+			}
+			]
+		}
+	res.json(resp).end();
 });
 module.exports = router;
 

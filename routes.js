@@ -22,41 +22,47 @@ router.post('/botHandler',function(req, res){
 	
 	console.log('req received');
 	console.log(JSON.stringify(req.body));
-	req.body.inputs.forEach(function(input){
-		if(input.intent == 'action.intent.TEXT'){
+	var len = req.body.inputs.length;
+	for(i=0; i<len; i++){		
+		if(req.body.inputs[i].intent == 'action.intent.TEXT'){
 			dialogflowAPI(rawInputs[0].query)
 			.then(function(resp){
 				console.log(JSON.stringify(resp));
 				res.json(resp).end();
 			})
+			break;
+		}else if(req.body.inputs[i].intent == 'action.intent.MAIN'){
+			var resp = {
+				"conversationToken": "",
+				"expectUserResponse": true,
+				"expectedInputs": [
+					{
+						"inputPrompt": {
+							"richInitialPrompt": {
+								"items": [
+									{
+										"simpleResponse": {
+											"textToSpeech": " Hai , I am PL. Hari, What can I do for you",
+											"displayText": "Hai , I am PL. Hari, What can I do for you"
+										}
+									}
+								],
+								"suggestions": []
+							}
+						},
+						"possibleIntents": [
+							{
+								"intent": "actions.intent.TEXT"
+							}
+						]
+					}
+				]
+			};
+			res.json(resp).end();
+			break;
 		}
-	})
-	/*var resp = {
-    "conversationToken": "",
-    "expectUserResponse": true,
-    "expectedInputs": [
-        {
-            "inputPrompt": {
-                "richInitialPrompt": {
-                    "items": [
-                        {
-                            "simpleResponse": {
-                                "textToSpeech": "Howdy! I can tell you fun facts about almost any number, like 42. What do you have in mind?",
-                                "displayText": "Howdy! I can tell you fun facts about almost any number. What do you have in mind?"
-                            }
-                        }
-                    ],
-                    "suggestions": []
-                }
-            },
-            "possibleIntents": [
-                {
-                    "intent": "actions.intent.TEXT"
-                }
-            ]
-        }
-    ]
-}*/
+	}
+	
 	
 });
 

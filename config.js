@@ -9,8 +9,7 @@ module.exports = {
 						"inputPrompt": {
 							"richInitialPrompt": {
 								"items": [],
-								"suggestions": [],
-								"linkOutSuggestion": {}
+								"suggestions": []								
 							}
 						},
 						"possibleIntents": [

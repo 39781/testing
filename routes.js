@@ -30,19 +30,16 @@ router.post('/botHandler',function(req, res){
 			.then(function(resp){
 				console.log(JSON.stringify(resp.result.fulfillment));
 				resp.result.fulfillment.messages.forEach(function(message){
-							
-					if(message.platform=='google'&&(message.type=="simple_response"||message.type=="suggestion_chips")){
-						if(message.suggestions){
-							res.json(simpleSugesstionsResponse(message.textToSpeech,message.suggestions)).end();
-						}else{
-							res.json(simpleSugesstionsResponse(message.textToSpeech,[])).end();
-						}
-					}
-					
-					
-				})
-				
-			})
+					var response = JSON.parse(JSON.stringify(config.responseObj));		
+					if(message.platform=='google'&&message.type=="simple_response"){						
+						simpleResponse(response, message.textToSpeech);
+					}	
+					if(message.platform=='google'&&message.type=="suggestion_chips"){
+						sugesstionChips(response, message.suggestions);
+					}					
+				});					
+			});
+			res.json(response).end();
 			break;
 		}else if(req.body.inputs[i].intent == 'actions.intent.MAIN'){			
 			res.json(simpleResponse("Hi, I am QuoteBuy bot, How can I help you?")).end();
@@ -79,34 +76,17 @@ var dialogflowAPI = function(input){
 	});
 }
 
-var simpleSugesstionsResponse = function(responseText, suggestions){
-	console.log(responseText);
-	return {
-				"conversationToken": "",
-				"expectUserResponse": true,
-				"expectedInputs": [
-					{
-						"inputPrompt": {
-							"richInitialPrompt": {
-								"items": [
-									{
-										"simpleResponse": {
-											"textToSpeech": responseText,
-											"displayText": responseText
-										}
-									}
-								],
-								"suggestions": suggestions
-							}
-						},
-						"possibleIntents": [
-							{
-								"intent": "actions.intent.TEXT"
-							}
-						]
-					}
-				]
-			};
+var simpleResponse = function(response, responseText){
+	response.expectedInputs[0].inputPrompt.richInitialPrompt.items.push({
+		"simpleResponse": {
+			"textToSpeech": responseText,
+			"displayText": responseText
+		}
+	});
+
+}
+var sugesstionChips = function(response, suggestions){
+	response.expectedInputs[0].inputPrompt.richInitialPrompt.suggestions = suggestions;
 }
 module.exports = router;
 

@@ -23,14 +23,13 @@ router.post('/botHandler',function(req, res){
 	console.log('req received');
 	console.log(JSON.stringify(req.body));
 	var len = req.body.inputs.length;
+	var response = JSON.parse(JSON.stringify(config.responseObj));					
 	for(i=0; i<len; i++){		
 		console.log(req.body.inputs[i].intent);
 		if(req.body.inputs[i].intent == 'actions.intent.TEXT'){
 			dialogflowAPI(req.body.inputs[i].rawInputs[0].query)
-			.then(function(resp){
-				console.log(JSON.stringify(resp.result.fulfillment));
-				resp.result.fulfillment.messages.forEach(function(message){
-					var response = JSON.parse(JSON.stringify(config.responseObj));		
+			.then(function(resp){				
+				resp.result.fulfillment.messages.forEach(function(message){											
 					if(message.platform=='google'&&message.type=="simple_response"){						
 						simpleResponse(response, message.textToSpeech);
 					}	
@@ -38,15 +37,14 @@ router.post('/botHandler',function(req, res){
 						sugesstionChips(response, message.suggestions);
 					}					
 				});					
-			});
-			res.json(response).end();
+			});			
 			break;
 		}else if(req.body.inputs[i].intent == 'actions.intent.MAIN'){			
-			res.json(simpleResponse("Hi, I am QuoteBuy bot, How can I help you?")).end();
+			simpleResponse(response, "Hi, I am QuoteBuy bot, How can I help you?");
 			break;
 		}
 	}
-	
+	res.json(response).end();
 	
 });
 

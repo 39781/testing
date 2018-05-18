@@ -31,12 +31,14 @@ router.post('/botHandler',function(req, res){
 				console.log(JSON.stringify(resp.result.fulfillment));
 				resp.result.fulfillment.messages.forEach(function(message){
 							
-					if(message.platform=='google'&&message.type=="simple_response"){
-						res.json(simpleResponse(message.textToSpeech)).end();
+					if(message.platform=='google'&&(message.type=="simple_response"||message.type=="suggestion_chips")){
+						if(message.suggestions){
+							res.json(simpleSugesstionsResponse(message.textToSpeech,message.suggestions)).end();
+						}else{
+							res.json(simpleSugesstionsResponse(message.textToSpeech,[])).end();
+						}
 					}
-					if(message.platform=='google'&&message.type=="suggestion_chips"){
-						res.json(suggestionChips(message.suggestions)).end();
-					}
+					
 					
 				})
 				
@@ -76,31 +78,8 @@ var dialogflowAPI = function(input){
 		});			
 	});
 }
-var suggestionChips = function(suggestions, responseText){
-	return {
-		"conversationToken": "",
-		"expectUserResponse": true,
-		"expectedInputs": [
-			{
-				"inputPrompt": {
-					"richInitialPrompt": {                    
-						"suggestions": suggestions,
-						"linkOutSuggestion": {
-							"destinationName": "Suggestion Link",
-							"url": "https://assistant.google.com/"
-						}
-					}
-				},
-				"possibleIntents": [
-					{
-						"intent": "actions.intent.TEXT"
-					}
-				]
-			}
-		]
-	}
-}
-var simpleResponse = function(responseText){
+
+var simpleSugesstionsResponse = function(responseText, suggestions){
 	console.log(responseText);
 	return {
 				"conversationToken": "",
@@ -117,7 +96,7 @@ var simpleResponse = function(responseText){
 										}
 									}
 								],
-								"suggestions": []
+								"suggestions": suggestions
 							}
 						},
 						"possibleIntents": [

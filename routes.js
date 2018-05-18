@@ -39,7 +39,7 @@ router.post('/botHandler',function(req, res){
 			})
 			break;
 		}else if(req.body.inputs[i].intent == 'actions.intent.MAIN'){			
-			res.json(simpleResponse("Hai , I am PL. Hari, What can I do for you")).end();
+			res.json(simpleResponse("Hi, I am QuoteBuy bot, How can I help you?")).end();
 			break;
 		}
 	}

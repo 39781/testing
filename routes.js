@@ -33,7 +33,11 @@ router.post('/botHandler',function(req, res){
 							
 					if(message.platform=='google'&&message.type=="simple_response"){
 						res.json(simpleResponse(message.textToSpeech)).end();
-					}					
+					}
+					if(message.platform=='google'&&message.type=="suggestion_chips"){
+						res.json(suggestionChips(message.suggestions)).end();
+					}
+					
 				})
 				
 			})
@@ -47,8 +51,7 @@ router.post('/botHandler',function(req, res){
 	
 });
 
-var dialogflowAPI = function(input){
-	
+var dialogflowAPI = function(input){	
 	return new Promise(function(resolve, reject){
 		var options = { 
 			method: 'POST',
@@ -72,6 +75,30 @@ var dialogflowAPI = function(input){
 			}		
 		});			
 	});
+}
+var suggestionChips = function(suggestions, responseText){
+	return {
+		"conversationToken": "",
+		"expectUserResponse": true,
+		"expectedInputs": [
+			{
+				"inputPrompt": {
+					"richInitialPrompt": {                    
+						"suggestions": suggestions,
+						"linkOutSuggestion": {
+							"destinationName": "Suggestion Link",
+							"url": "https://assistant.google.com/"
+						}
+					}
+				},
+				"possibleIntents": [
+					{
+						"intent": "actions.intent.TEXT"
+					}
+				]
+			}
+		]
+	}
 }
 var simpleResponse = function(responseText){
 	console.log(responseText);

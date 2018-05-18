@@ -29,22 +29,28 @@ router.post('/botHandler',function(req, res){
 		if(req.body.inputs[i].intent == 'actions.intent.TEXT'){
 			dialogflowAPI(req.body.inputs[i].rawInputs[0].query)
 			.then(function(resp){				
-				resp.result.fulfillment.messages.forEach(function(message){											
+				for(l=0;l<resp.result.fulfillment.messages.length;l++){
+					message = resp.result.fulfillment.messages[l];
+				//resp.result.fulfillment.messages.forEach(function(message){											
 					if(message.platform=='google'&&message.type=="simple_response"){						
 						simpleResponse(response, message.textToSpeech);
 					}	
 					if(message.platform=='google'&&message.type=="suggestion_chips"){
 						sugesstionChips(response, message.suggestions);
-					}					
-				});					
+					}			
+									
+				};//);						
+				res.json(response).end();					
 			});			
 			break;
 		}else if(req.body.inputs[i].intent == 'actions.intent.MAIN'){			
 			simpleResponse(response, "Hi, I am QuoteBuy bot, How can I help you?");
+			res.json(response).end();
 			break;
 		}
-	}
-	res.json(response).end();
+	}	
+	
+	
 	
 });
 
@@ -80,11 +86,11 @@ var simpleResponse = function(response, responseText){
 			"textToSpeech": responseText,
 			"displayText": responseText
 		}
-	});
-
+	});	
 }
 var sugesstionChips = function(response, suggestions){
-	response.expectedInputs[0].inputPrompt.richInitialPrompt.suggestions = suggestions;
+	console.log(suggestions);
+	response.expectedInputs[0].inputPrompt.richInitialPrompt.suggestions = suggestions;	
 }
 module.exports = router;
 

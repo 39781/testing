@@ -26,12 +26,12 @@ router.post('/botHandler',function(req, res){
 	for(i=0; i<len; i++){		
 		console.log(req.body.inputs[i].intent);
 		if(req.body.inputs[i].intent == 'actions.intent.TEXT'){
-			dialogflowAPI(req.body.inputs[i].rawInputs[0].query)
+			dialogflowAPI(req.body.inputs[i].rawInputs[0].query, req.body.conversation.conversationId)
 			.then(function(resp){
 				if(typeof(chatLog[resp.result.sessionId]) == 'undefined'){
 					chatLog[resp.result.sessionId]=[];
 				}
-				var log = {'user':resp.result.resolvedQuery,'Bot':''};
+				var log = {'user':resp.result.resolvedQuery,'bot':'',intentName:resp.result.metadata.intentName};
 				if(resp.result.fulfillment.speech){
 					log.Bot = resp.result.fulfillment.speech;
 				}
@@ -65,32 +65,53 @@ router.post('/botHandler',function(req, res){
 	
 });
 
-var dialogflowAPI = function(input){	
+var dialogflowAPI = function(input, sessionId){	
 	return new Promise(function(resolve, reject){
-		var options = { 
-			method: 'POST',
-			url: config.dialogflowAPI,
-			headers: {
-				"Authorization": "Bearer " + config.accessToken
-			},
-			body:{
-				sessionId: uuidv1(),
-				lang: "en",
-				query:input
-			},			
-			json: true 
-		}; 			
-		console.log(options);
-		request(options, function (error, response, body) {
-			if(error){
-				res.json({error:"error in chat server api call"}).end();
-			}else{											
-				resolve(body);
-			}		
-		});			
+		queryCheck(input, sessionId)
+		.then(function(inputQuery){
+			var options = { 
+				method: 'POST',
+				url: config.dialogflowAPI,
+				headers: {
+					"Authorization": "Bearer " + config.accessToken
+				},
+				body:{
+					sessionId: uuidv1(),
+					lang: "en",
+					query:inputQuery
+				},			
+				json: true 
+			}; 			
+			console.log(options);
+			request(options, function (error, response, body) {
+				if(error){
+					res.json({error:"error in chat server api call"}).end();
+				}else{											
+					resolve(body);
+				}		
+			});
+		})
+		.catch(function(err){
+			
+		})
+					
 	});
 }
-
+var queryCheck = function(query, sessionId){
+	return new Promise(function(resolve, reject){
+		if(chatLog[sessionId]){
+			var flag = false;
+			var len = chatLog[sessionId].length--;
+			if(chatLog[sessionId][len]['bot'] == 'Please share your business type?'&& chatLog[sessionId][len]['intentName'] == 'insuranceLookup'){			
+				flag = true;
+			}
+			if(flag){			
+				query = chatLog[sessionId][len-1]['user'] + query;
+			}
+		}
+		resolve(query);		
+	});
+}
 var simpleResponse = function(response, responseText){
 	response.expectedInputs[0].inputPrompt.richInitialPrompt.items.push({
 		"simpleResponse": {

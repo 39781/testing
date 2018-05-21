@@ -28,7 +28,8 @@ router.post('/botHandler',function(req, res){
 		console.log(req.body.inputs[i].intent);
 		if(req.body.inputs[i].intent == 'actions.intent.TEXT'){
 			dialogflowAPI(req.body.inputs[i].rawInputs[0].query)
-			.then(function(resp){				
+			.then(function(resp){
+				console.log(resp);	
 				for(l=0;l<resp.result.fulfillment.messages.length;l++){
 					message = resp.result.fulfillment.messages[l];
 				//resp.result.fulfillment.messages.forEach(function(message){											

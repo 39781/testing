@@ -19,12 +19,12 @@ router.get('/', function(req, res) {
 
 
 router.post('/botHandler',function(req, res){	
-	console.log('req received');
-	console.log(JSON.stringify(req.body));
+	//console.log('req received');
+	//console.log(JSON.stringify(req.body));
 	var len = req.body.inputs.length;
 	var response = JSON.parse(JSON.stringify(config.responseObj));					
 	for(i=0; i<len; i++){		
-		console.log(req.body.inputs[i].intent);
+		//console.log(req.body.inputs[i].intent);
 		if(req.body.inputs[i].intent == 'actions.intent.TEXT'){
 			dialogflowAPI(req.body.inputs[i].rawInputs[0].query, req.body.conversation.conversationId)
 			.then(function(resp){
@@ -35,7 +35,7 @@ router.post('/botHandler',function(req, res){
 				if(resp.result.fulfillment.speech){
 					log.Bot = resp.result.fulfillment.speech;
 				}
-				console.log(resp);	
+				console.log(JSON.stringify(resp));	
 				for(l=0;l<resp.result.fulfillment.messages.length;l++){
 					message = resp.result.fulfillment.messages[l];
 				//resp.result.fulfillment.messages.forEach(function(message){											
@@ -50,7 +50,7 @@ router.post('/botHandler',function(req, res){
 									
 				};//);		
 				chatLog[resp.result.sessionId].push(log);	
-				console.log(JSON.stringify(chatLog[resp.result.sessionId]));
+				//console.log(JSON.stringify(chatLog[resp.result.sessionId]));
 				res.json(response).end();					
 			});			
 			break;
@@ -65,9 +65,9 @@ router.post('/botHandler',function(req, res){
 	
 });
 
-var dialogflowAPI = function(input, sessionId){	
+var dialogflowAPI = function(input, sessId){	
 	return new Promise(function(resolve, reject){
-		queryCheck(input, sessionId)
+		queryCheck(input, sessId)
 		.then(function(inputQuery){
 			var options = { 
 				method: 'POST',
@@ -76,13 +76,13 @@ var dialogflowAPI = function(input, sessionId){
 					"Authorization": "Bearer " + config.accessToken
 				},
 				body:{
-					sessionId: uuidv1(),
+					sessionId: sessId,
 					lang: "en",
 					query:inputQuery
 				},			
 				json: true 
 			}; 			
-			console.log(options);
+			//console.log(options);
 			request(options, function (error, response, body) {
 				if(error){
 					res.json({error:"error in chat server api call"}).end();
@@ -121,7 +121,7 @@ var simpleResponse = function(response, responseText){
 	});	
 }
 var sugesstionChips = function(response, suggestions){
-	console.log(suggestions);
+	//console.log(suggestions);
 	response.expectedInputs[0].inputPrompt.richInitialPrompt.suggestions = suggestions;	
 }
 module.exports = router;

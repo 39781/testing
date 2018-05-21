@@ -19,6 +19,14 @@ router.get('/', function(req, res) {
 
 
 router.post('/botHandler',function(req, res){	
+	var x = req.session;
+	if(typeof(x[req.body.conversation.conversationId]) == 'undefined'){
+		console.log('testing');
+		x[req.body.conversation.conversationId]={};
+	}
+		
+	x[req.body.conversation.conversationId][uuidv1()] = 'hari';		
+	console.log(req.session);
 	console.log('req received');
 	console.log(JSON.stringify(req.body));
 	var len = req.body.inputs.length;

@@ -18,8 +18,7 @@ router.get('/', function(req, res) {
 
 
 
-router.post('/botHandler',function(req, res){
-	
+router.post('/botHandler',function(req, res){	
 	console.log('req received');
 	console.log(JSON.stringify(req.body));
 	var len = req.body.inputs.length;
@@ -29,18 +28,29 @@ router.post('/botHandler',function(req, res){
 		if(req.body.inputs[i].intent == 'actions.intent.TEXT'){
 			dialogflowAPI(req.body.inputs[i].rawInputs[0].query)
 			.then(function(resp){
+				if(typeof(chatLog[resp.result.sessionId]) == 'undefined'){
+					chatLog[resp.result.sessionId]=[];
+				}
+				var log = {'user':resp.result.resolvedQuery,'Bot':''};
+				if(resp.result.fulfillment.speech){
+					log.Bot = resp.result.fulfillment.speech;
+				}
 				console.log(resp);	
 				for(l=0;l<resp.result.fulfillment.messages.length;l++){
 					message = resp.result.fulfillment.messages[l];
 				//resp.result.fulfillment.messages.forEach(function(message){											
 					if(message.platform=='google'&&message.type=="simple_response"){						
+						log.Bot += ','+message.textToSpeech;
 						simpleResponse(response, message.textToSpeech);
 					}	
 					if(message.platform=='google'&&message.type=="suggestion_chips"){
+						log.Bot += ', Suggesion Chips :'+JSON.stringify(message.suggestions);
 						sugesstionChips(response, message.suggestions);
 					}			
 									
-				};//);						
+				};//);		
+				chatLog[resp.result.sessionId].push(log);	
+				console.log(JSON.stringify(chatLog[resp.result.sessionId]));
 				res.json(response).end();					
 			});			
 			break;

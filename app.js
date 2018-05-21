@@ -32,10 +32,7 @@ app.use(bodyParser.json());
 app.set('views', __dirname + '/public/views');
 app.set('view engine', 'ejs');
 app.use(routes);
-global.bookingInfo = {
-	tickets:{},
-	seatsInfo:{}
-};
+global.chatLog = {};
 var server = app.listen(port,function(){
 	console.log("Application started listening port "+port);		
 });

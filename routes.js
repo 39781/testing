@@ -13,20 +13,12 @@ const uuidv1 		= require('uuid/v1');
 //const sendOtp 		= new SendOtp('209393AILCgzYm2m675acd86a1');
 router.get('/', function(req, res) {
 	console.log('hari');
-  res.redirect("/home.html");
+  res.send("welcome to macy");
 });
 
 
 
-router.post('/botHandler',function(req, res){	
-	var x = req.session;
-	if(typeof(x[req.body.conversation.conversationId]) == 'undefined'){
-		console.log('testing');
-		x[req.body.conversation.conversationId]={};
-	}
-		
-	x[req.body.conversation.conversationId][uuidv1()] = 'hari';		
-	console.log(req.session);
+router.post('/botHandler',function(req, res){			
 	console.log('req received');
 	console.log(JSON.stringify(req.body));
 	var len = req.body.inputs.length;
@@ -57,9 +49,6 @@ router.post('/botHandler',function(req, res){
 			break;
 		}
 	}	
-	
-	
-	
 });
 
 var dialogflowAPI = function(input, sessId){	
@@ -76,8 +65,7 @@ var dialogflowAPI = function(input, sessId){
 				query:input
 			},			
 			json: true 
-		}; 			
-		console.log(options);
+		}; 					
 		request(options, function (error, response, body) {
 			if(error){
 				res.json({error:"error in chat server api call"}).end();
@@ -96,6 +84,7 @@ var simpleResponse = function(response, responseText){
 		}
 	});	
 }
+
 var sugesstionChips = function(response, suggestions){
 	console.log(suggestions);
 	response.expectedInputs[0].inputPrompt.richInitialPrompt.suggestions = suggestions;	

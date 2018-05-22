@@ -44,7 +44,7 @@ router.post('/botHandler',function(req, res){
 			});			
 			break;
 		}else if(req.body.inputs[i].intent == 'actions.intent.MAIN'){			
-			simpleResponse(response, "Hi, I am QuoteBuy bot, How can I help you?");
+			simpleResponse(response, "Hi, I'm Macy. Your friendly Personal Assistant. How can I help you today?");
 			res.json(response).end();
 			break;
 		}

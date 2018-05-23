@@ -25,7 +25,7 @@ router.get('/answer',function(req, res){
 	  'next available representative will take your call. ',
 	  { voice: 'alice' });
 
-	twimlResponse.dial(salesNumber);
+//	twimlResponse.dial(salesNumber);
 
         response.send(twimlResponse.toString());
     /*const response = new VoiceResponse();

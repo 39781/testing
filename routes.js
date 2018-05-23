@@ -47,11 +47,7 @@ router.get('/call',function(req, res){
 		from: '+1 913-705-4764'		
 	  })
 	  .then(call => {
-		  					
-			res.writeHead(200, { 'Content-Type': 'text/xml' });
-			res.send({
-                message: 'Thank you! We will be calling you shortly.',
-            });
+		  					console.log(call.sid);			
 		  
 	  })
 	  .catch(err => res.status(500).send(err));	

@@ -20,15 +20,15 @@ router.get('/', function(req, res) {
   res.send("welcome to macy");
 });
 router.post('/answer',function(req, res){
-	//console.log(req,'req received');
+	/*console.log(req,'req received');
 	twimlResponse.say('Thanks for contacting our sales department. Our ' +
 	  'next available representative will take your call. ',
 	  { voice: 'alice' });
 
-//	twimlResponse.dial(salesNumber);
+	twimlResponse.dial(salesNumber);
 
-        res.send(twimlResponse.toString());
-    /*const response = new VoiceResponse();
+        res.send(twimlResponse.toString());*/
+    const response = new VoiceResponse();
 	const gather = response.gather({
 	  input: 'speech dtmf',
 	  timeout: 3,
@@ -36,7 +36,7 @@ router.post('/answer',function(req, res){
 	});
 	gather.say('Please press 1 or say sales for sales.');
 	res.writeHead(200, { 'Content-Type': 'text/xml' });
-    res.end();*/
+    res.end(response.toString());
 })
 
 router.get('/call',function(req, res){		

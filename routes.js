@@ -3,7 +3,7 @@ var router			= express.Router();
 var request			= require('request');	
 var fs 				= require("fs");	
 var request			= require('request');
-const {URLSearchParams} = require('url')
+var url				= require('url')
 var path			= require("path");	
 var config			= require('./config');	
 const uuidv1 		= require('uuid/v1');
@@ -34,11 +34,11 @@ router.get('/reply',function(req, res){
 	var q = url.parse(req.url, true).query;
 	console.log(req.url);
 	var txt = q.SpeechResult.replace(/+/,' ');
-	
+	res.redirect('/answer?textResult='+txt);
 	res.end();
 });
 router.get('/answer',function(req, res){
-	console.log(req,'req received');
+	//console.log(req,'req received');
 	/*twimlResponse.say('Thanks for contacting our sales department. Our ' +
 	  'next available representative will take your call. ',
 	  { voice: 'alice' });
@@ -54,7 +54,7 @@ router.get('/answer',function(req, res){
 	  action:'/reply',
 	  method:'GET'
 	});
-	gather.say(botRep["hello"]);
+	gather.say(' ');
 	
 	res.writeHead(200, { 'Content-Type': 'text/xml' });
     res.end(response.toString());

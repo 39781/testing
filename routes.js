@@ -19,7 +19,7 @@ router.get('/', function(req, res) {
 	console.log('hari');
   res.send("welcome to macy");
 });
-router.get('/answer',function(req, res){
+router.post('/answer',function(req, res){
 	//console.log(req,'req received');
 	twimlResponse.say('Thanks for contacting our sales department. Our ' +
 	  'next available representative will take your call. ',
@@ -44,7 +44,7 @@ router.get('/call',function(req, res){
 	  .create({
 		url: 'https://fast-reef-26757.herokuapp.com/answer',
 		to: '+918500050085',
-		from: '+1 913-705-4764'
+		from: '+1 913-705-4764'		
 	  })
 	  .then(call => {
 		  					

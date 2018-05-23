@@ -21,23 +21,25 @@ router.get('/', function(req, res) {
 });
 router.get('/answer',function(req, res){
 	console.log(req,'req received');
-	
-    const response = new VoiceResponse();
+	twimlResponse.say('Thanks for contacting our sales department. Our ' +
+	  'next available representative will take your call. ',
+	  { voice: 'alice' });
+
+	twimlResponse.dial(salesNumber);
+
+        response.send(twimlResponse.toString());
+    /*const response = new VoiceResponse();
 	const gather = response.gather({
 	  input: 'speech dtmf',
 	  timeout: 3,
 	  numDigits: 1,
 	});
-	gather.say('Please press 1 or say sales for sales.');
+	gather.say('Please press 1 or say sales for sales.');*/
 	res.writeHead(200, { 'Content-Type': 'text/xml' });
     res.end();
 })
 
-router.get('/call',function(req, res){	
-	const accountSid = 'AC233d3ebceafad1c7658d64dad3ae03bd';
-	const authToken = '574bce6f3f25f3f744b1cf08e39ca8c3';
-	const client = require('twilio')(accountSid, authToken);
-
+router.get('/call',function(req, res){		
 	client.calls
 	  .create({
 		url: 'https://fast-reef-26757.herokuapp.com/answer',
@@ -45,13 +47,14 @@ router.get('/call',function(req, res){
 		from: '+1 913-705-4764'
 	  })
 	  .then(call => {
-		  		
-				
+		  					
 			res.writeHead(200, { 'Content-Type': 'text/xml' });
-			res.end();
+			res.send({
+                message: 'Thank you! We will be calling you shortly.',
+            });
 		  
 	  })
-	  .catch(err => console.log(err));	
+	  .catch(err => res.status(500).send(err));	
 });
 router.post('/evevnt',function(req, res){
 	console.log('event');

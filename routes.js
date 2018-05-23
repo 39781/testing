@@ -16,7 +16,15 @@ router.get('/', function(req, res) {
   res.send("welcome to macy");
 });
 
+router.post('/answer',function(req, res){	
+	console.log('answer');
+	res.end();
+});
 
+router.post('/evevnt',function(req, res){
+	console.log('event');
+	res.end();
+});
 
 router.post('/botHandler',function(req, res){			
 	console.log('req received');

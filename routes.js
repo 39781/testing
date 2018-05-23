@@ -19,6 +19,10 @@ router.get('/', function(req, res) {
 	console.log('hari');
   res.send("welcome to macy");
 });
+router.get('/reply',function(req, res){
+	console.log(req);
+	res.end();
+});
 router.post('/answer',function(req, res){
 	/*console.log(req,'req received');
 	twimlResponse.say('Thanks for contacting our sales department. Our ' +
@@ -33,8 +37,10 @@ router.post('/answer',function(req, res){
 	  input: 'speech dtmf',
 	  timeout: 3,
 	  numDigits: 1,
+	  action:'/reply',
+	  method:GET
 	});
-	gather.say('Please press 1 or say sales for sales.');
+	gather.say('Hi. I am calling to book an appointment for a client, Mr. John who wants to insure the assets of his candy manufacturing business. I am looking for your time , sometime tomorrow at 3 pm');
 	res.writeHead(200, { 'Content-Type': 'text/xml' });
     res.end(response.toString());
 })
@@ -47,8 +53,7 @@ router.get('/call',function(req, res){
 		from: '+1 913-705-4764'		
 	  })
 	  .then(call => {
-		  					console.log(call.sid);			
-		  
+		  	console.log(call.sid);					  
 	  })
 	  .catch(err => res.status(500).send(err));	
 });

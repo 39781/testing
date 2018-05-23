@@ -39,9 +39,16 @@ router.get('/call',function(req, res){
 		from: '+1 913-705-4764'
 	  })
 	  .then(call => {
-		  twiml.say('Hello from your pals at Twilio! Have fun.');
+		  		const response = new VoiceResponse();
+				const gather = response.gather({
+				  input: 'speech dtmf',
+				  timeout: 3,
+				  numDigits: 1,
+				});
+				gather.say('Please press 1 or say sales for sales.');
+				
 			res.writeHead(200, { 'Content-Type': 'text/xml' });
-			res.end(twiml.toString());
+			res.end();
 		  
 	  })
 	  .catch(err => console.log(err));	

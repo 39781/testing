@@ -20,7 +20,7 @@ router.get('/', function(req, res) {
   res.send("welcome to macy");
 });
 router.get('/answer',function(req, res){
-	console.log(req,'req received');
+	//console.log(req,'req received');
 	twimlResponse.say('Thanks for contacting our sales department. Our ' +
 	  'next available representative will take your call. ',
 	  { voice: 'alice' });

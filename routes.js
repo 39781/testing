@@ -27,16 +27,16 @@ router.get('/answer',function(req, res){
 
 //	twimlResponse.dial(salesNumber);
 
-        response.send(twimlResponse.toString());
+        res.send(twimlResponse.toString());
     /*const response = new VoiceResponse();
 	const gather = response.gather({
 	  input: 'speech dtmf',
 	  timeout: 3,
 	  numDigits: 1,
 	});
-	gather.say('Please press 1 or say sales for sales.');*/
+	gather.say('Please press 1 or say sales for sales.');
 	res.writeHead(200, { 'Content-Type': 'text/xml' });
-    res.end();
+    res.end();*/
 })
 
 router.get('/call',function(req, res){		

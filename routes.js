@@ -10,7 +10,7 @@ const accountSid = 'AC233d3ebceafad1c7658d64dad3ae03bd';
 const authToken = '574bce6f3f25f3f744b1cf08e39ca8c3';
 const client = require('twilio')(accountSid, authToken);
 const VoiceResponse = require('twilio').twiml.VoiceResponse;
-const twiml = new VoiceResponse();
+const twimlResponse = new VoiceResponse();
 //var Authentication = require('./utilities/Authentication');
 
 

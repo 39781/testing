@@ -35,12 +35,13 @@ router.post('/answer',function(req, res){
     const response = new VoiceResponse();
 	const gather = response.gather({
 	  input: 'speech dtmf',
-	  timeout: 3,
+	  timeout: 10,
 	  numDigits: 1,
 	  action:'/reply',
 	  method:'GET'
 	});
 	gather.say('Hi. I am calling to book an appointment for a client, Mr. John who wants to insure the assets of his candy manufacturing business. I am looking for your time , sometime tomorrow at 3 pm');
+	
 	res.writeHead(200, { 'Content-Type': 'text/xml' });
     res.end(response.toString());
 })

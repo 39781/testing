@@ -20,7 +20,7 @@ router.get('/', function(req, res) {
   res.send("welcome to macy");
 });
 router.get('/reply',function(req, res){
-	console.log(req);
+	console.log(req.url);
 	res.end();
 });
 router.post('/answer',function(req, res){

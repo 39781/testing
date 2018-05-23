@@ -44,8 +44,7 @@ router.get('/call',function(req, res){
 			res.end(twiml.toString());
 		  
 	  })
-	  .catch(err => console.log(err));
-	res.end();
+	  .catch(err => console.log(err));	
 });
 router.post('/evevnt',function(req, res){
 	console.log('event');

@@ -17,10 +17,9 @@ router.get('/', function(req, res) {
 });
 
 router.post('/answer',function(req, res){	
-	console.log('answer');
+	console.log(req.body);
 	res.end();
 });
-
 router.post('/evevnt',function(req, res){
 	console.log('event');
 	res.end();

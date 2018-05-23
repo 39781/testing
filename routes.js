@@ -38,7 +38,7 @@ router.post('/answer',function(req, res){
 	  timeout: 3,
 	  numDigits: 1,
 	  action:'/reply',
-	  method:GET
+	  method:'GET'
 	});
 	gather.say('Hi. I am calling to book an appointment for a client, Mr. John who wants to insure the assets of his candy manufacturing business. I am looking for your time , sometime tomorrow at 3 pm');
 	res.writeHead(200, { 'Content-Type': 'text/xml' });

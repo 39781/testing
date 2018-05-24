@@ -36,7 +36,7 @@ router.get('/reply',function(req, res){
 	console.log('query params',JSON.stringify(q));
 	//var txt = q.SpeechResult.replace(/[+]/,' ');
 	//console.log('text',txt);
-	response.redirect({method:'GET'},'https://fast-reef-26757.herokuapp.com/answer?SpeechResult='+q.SpeechResult);
+	response.redirect({method:'GET'},'https://fast-reef-26757.herokuapp.com/answer?SpeechResult='+encodeURIComponent(q.SpeechResult));
 	res.writeHead(200, { 'Content-Type': 'text/xml' });
 	res.end(response.toString());
 });
@@ -51,8 +51,7 @@ router.get('/answer',function(req, res){
 
         res.send(twimlResponse.toString());*/    
 	const gather = response.gather({
-	  input: 'speech dtmf',
-	  timeout: 3,
+	  input: 'speech dtmf',	  
 	  numDigits: 1,
 	  action:'/reply',
 	  method:'GET'

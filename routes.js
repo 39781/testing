@@ -32,7 +32,7 @@ router.get('/', function(req, res) {
 router.get('/reply',function(req, res){
 	console.log(req.url);
 	var q = url.parse(req.url, true).query;
-	console.log(req.url);
+	console.log(JSON.sringify(q));
 	var txt = q.SpeechResult.replace(/+/,' ');
 	response.redirect({method:'GET'},'/answer?textResult='+txt);
 	res.end();

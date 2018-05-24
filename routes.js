@@ -41,8 +41,7 @@ router.get('/reply',function(req, res){
 	res.end(response.toString());
 });
 
-router.get('/answer',function(req, res){
-	console.log('query',req.query,'params',req.params,'req received');
+router.get('/answer',function(req, res){	
 	/*twimlResponse.say('Thanks for contacting our sales department. Our ' +
 	  'next available representative will take your call. ',
 	  { voice: 'alice' });
@@ -56,9 +55,12 @@ router.get('/answer',function(req, res){
 	  action:'/reply',
 	  method:'GET'
 	});
+	console.log(req,query,result);
 	if(req.query.SpeechResult=='Hello'){
+		console.log('1');
 		gather.say(req.query.SpeechResult,{ voice: 'alice' });	
 	}else{
+		console.log('2');
 		gather.say(botRep[req.query.SpeechResult],{ voice: 'alice' });	
 	}
 	//gather.say(botRep[req.query.textResult],{ voice: 'alice' });	

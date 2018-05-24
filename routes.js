@@ -38,7 +38,7 @@ router.get('/reply',function(req, res){
 	res.end();
 });
 router.get('/answer',function(req, res){
-	console.log('query',req.query,'params',req,params'req received');
+	console.log('query',req.query,'params',req.params,'req received');
 	/*twimlResponse.say('Thanks for contacting our sales department. Our ' +
 	  'next available representative will take your call. ',
 	  { voice: 'alice' });

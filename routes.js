@@ -11,9 +11,9 @@ const accountSid = 'AC233d3ebceafad1c7658d64dad3ae03bd';
 const authToken = '574bce6f3f25f3f744b1cf08e39ca8c3';
 const client = require('twilio')(accountSid, authToken);
 const VoiceResponse = require('twilio').twiml.VoiceResponse;
-const twimlResponse = new VoiceResponse();
+const response = new VoiceResponse();
 var botRep={
-	"hello":"Hi. I am calling to book an appointment for a client, Mr. John who wants to insure the assets of his candy manufacturing business. I am looking for your time , sometime tomorrow at 3 pm",
+	"Hi, How can I help you?":"Hi. I am calling to book an appointment for a client, Mr. John who wants to insure the assets of his candy manufacturing business. I am looking for your time , sometime tomorrow at 3 pm",
 	"I have another meeting at 3 pm which will get over by 4; so the earliest I can call Mr. John is around 4.15 pm":"Do you have any availability between 2 to 4 pm tomorrow?",
 	"Sure. I can call Mr. John at 2.30 pm tomorrow":"2.30 pm is fine",
 	"Can you provide the coordinates of Mr. John":"His mobile number is xxx xxx xxxx and his email id is xxxx@gmail.com",
@@ -34,19 +34,18 @@ router.get('/reply',function(req, res){
 	var q = url.parse(req.url, true).query;
 	console.log(req.url);
 	var txt = q.SpeechResult.replace(/+/,' ');
-	res.redirect('/answer?textResult='+txt);
+	response.redirect({method:'GET'},'/answer?textResult='+txt);
 	res.end();
 });
 router.get('/answer',function(req, res){
-	//console.log(req,'req received');
+	console.log('query',req.query,'params',req,params'req received');
 	/*twimlResponse.say('Thanks for contacting our sales department. Our ' +
 	  'next available representative will take your call. ',
 	  { voice: 'alice' });
 
 	twimlResponse.dial(salesNumber);
 
-        res.send(twimlResponse.toString());*/
-    const response = new VoiceResponse();
+        res.send(twimlResponse.toString());*/    
 	const gather = response.gather({
 	  input: 'speech dtmf',
 	  timeout: 10,
@@ -54,8 +53,7 @@ router.get('/answer',function(req, res){
 	  action:'/reply',
 	  method:'GET'
 	});
-	gather.say(' ');
-	
+	gather.say("Hello");	
 	res.writeHead(200, { 'Content-Type': 'text/xml' });
     res.end(response.toString());
 })

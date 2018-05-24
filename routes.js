@@ -12,8 +12,7 @@ const authToken = '574bce6f3f25f3f744b1cf08e39ca8c3';
 const client = require('twilio')(accountSid, authToken);
 const VoiceResponse = require('twilio').twiml.VoiceResponse;
 var l = 1;
-var botRep={
-	
+var botRep={	
 	1:"Hi. I am calling to book an appointment for a client, Mr. John who wants to insure the assets of his candy manufacturing business. I am looking for your time , sometime tomorrow at 3 pm",
 	2:"Do you have any availability between 2 to 4 pm tomorrow?",
 	3:"2.30 pm is fine",
@@ -37,7 +36,11 @@ router.get('/reply',function(req, res){
 	console.log('query params',JSON.stringify(q));
 	//var txt = q.SpeechResult.replace(/[+]/,' ');
 	//console.log('text',txt);
-	response.redirect({method:'GET'},'https://fast-reef-26757.herokuapp.com/answer?SpeechResult='+encodeURIComponent(q.SpeechResult));
+	if(/bye/ig.test(q.SpeechResult)){
+		response.hangup();
+	}else{
+		response.redirect({method:'GET'},'https://fast-reef-26757.herokuapp.com/answer?SpeechResult='+encodeURIComponent(q.SpeechResult));
+	}
 	res.writeHead(200, { 'Content-Type': 'text/xml' });
 	res.end(response.toString());
 });
@@ -98,6 +101,13 @@ router.post('/botHandler',function(req, res){
 		if(req.body.inputs[i].intent == 'actions.intent.TEXT'){
 			dialogflowAPI(req.body.inputs[i].rawInputs[0].query, req.body.conversation.conversationId)
 			.then(function(resp){
+				if(resp.result.metadata.intentName == 'finalIntent'){
+					request('https://fast-reef-26757.herokuapp.com/call', function (error, response, body) {
+						  console.log('error:', error); // Print the error if one occurred
+						  console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
+						  console.log('body:', body); // Print the HTML for the Google homepage.
+					});
+				}
 				console.log(resp);	
 				for(l=0;l<resp.result.fulfillment.messages.length;l++){
 					message = resp.result.fulfillment.messages[l];
@@ -107,8 +117,7 @@ router.post('/botHandler',function(req, res){
 					}	
 					if(message.platform=='google'&&message.type=="suggestion_chips"){
 						sugesstionChips(response, message.suggestions);
-					}			
-									
+					}									
 				};//);						
 				res.json(response).end();					
 			});			

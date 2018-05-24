@@ -13,7 +13,7 @@ const client = require('twilio')(accountSid, authToken);
 const VoiceResponse = require('twilio').twiml.VoiceResponse;
 const response = new VoiceResponse();
 var botRep={
-	"hello":"hello"
+	"hello":"hello",
 	"Hi, How can I help you?":"Hi. I am calling to book an appointment for a client, Mr. John who wants to insure the assets of his candy manufacturing business. I am looking for your time , sometime tomorrow at 3 pm",
 	"I have another meeting at 3 pm which will get over by 4; so the earliest I can call Mr. John is around 4.15 pm":"Do you have any availability between 2 to 4 pm tomorrow?",
 	"Sure. I can call Mr. John at 2.30 pm tomorrow":"2.30 pm is fine",

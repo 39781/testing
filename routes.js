@@ -36,7 +36,7 @@ router.get('/reply',function(req, res){
 	console.log('query params',JSON.stringify(q));
 	//var txt = q.SpeechResult.replace(/[+]/,' ');
 	//console.log('text',txt);
-	response.redirect({method:'GET'},'/answer?SpeechResult='+q.SpeechResult);
+	response.redirect({method:'GET'},'https://fast-reef-26757.herokuapp.com/answer?SpeechResult='+q.SpeechResult);
 	res.writeHead(200, { 'Content-Type': 'text/xml' });
 	res.end(response.toString());
 });

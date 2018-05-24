@@ -15,9 +15,9 @@ var l = 1;
 var botRep={
 	
 	1:"Hi. I am calling to book an appointment for a client, Mr. John who wants to insure the assets of his candy manufacturing business. I am looking for your time , sometime tomorrow at 3 pm",
-	2::"Do you have any availability between 2 to 4 pm tomorrow?",
+	2:"Do you have any availability between 2 to 4 pm tomorrow?",
 	3:"2.30 pm is fine",
-	4:"Can you provide the coordinates of Mr. John":"His mobile number is xxx xxx xxxx and his email id is xxxx@gmail.com",
+	4:"His mobile number is xxx xxx xxxx and his email id is xxxx@gmail.com",
 	5:"Sure. I will do that. Thanks",
 	6:"bye"
 }

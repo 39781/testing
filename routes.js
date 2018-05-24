@@ -33,9 +33,9 @@ router.get('/reply',function(req, res){
 	console.log(req.url);
 	var q = url.parse(req.url, true).query;
 	console.log('query params',JSON.stringify(q));
-	var txt = q.SpeechResult.replace(/[+]/,' ');
+	//var txt = q.SpeechResult.replace(/[+]/,' ');
 	console.log('text',txt);
-	response.redirect({method:'GET'},'/answer?textResult='+txt);
+	response.redirect({method:'GET'},'/answer?textResult='+q.SpeechResult);
 	res.end();
 });
 router.get('/answer',function(req, res){
@@ -49,7 +49,7 @@ router.get('/answer',function(req, res){
         res.send(twimlResponse.toString());*/    
 	const gather = response.gather({
 	  input: 'speech dtmf',
-	  timeout: 10,
+	  timeout: 3,
 	  numDigits: 1,
 	  action:'/reply',
 	  method:'GET'
@@ -62,7 +62,7 @@ router.get('/answer',function(req, res){
 router.get('/call',function(req, res){		
 	client.calls
 	  .create({
-		url: 'https://fast-reef-26757.herokuapp.com/answer',
+		url: 'https://fast-reef-26757.herokuapp.com/answer?textResult=Hello',
 		to: '+918500050085',
 		from: '+1 913-705-4764',
 		method:"GET"	

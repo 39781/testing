@@ -11,7 +11,7 @@ const accountSid = 'AC233d3ebceafad1c7658d64dad3ae03bd';
 const authToken = '574bce6f3f25f3f744b1cf08e39ca8c3';
 const client = require('twilio')(accountSid, authToken);
 const VoiceResponse = require('twilio').twiml.VoiceResponse;
-const response = new VoiceResponse();
+
 var botRep={
 	"hello":"hello",
 	"Hi, How can I help you?":"Hi. I am calling to book an appointment for a client, Mr. John who wants to insure the assets of his candy manufacturing business. I am looking for your time , sometime tomorrow at 3 pm",
@@ -31,6 +31,7 @@ router.get('/', function(req, res) {
 });
 
 router.get('/reply',function(req, res){
+	const response = new VoiceResponse();
 	console.log(req.url);
 	var q = url.parse(req.url, true).query;
 	console.log('query params',JSON.stringify(q));
@@ -42,6 +43,7 @@ router.get('/reply',function(req, res){
 });
 
 router.get('/answer',function(req, res){	
+	const response = new VoiceResponse();
 	/*twimlResponse.say('Thanks for contacting our sales department. Our ' +
 	  'next available representative will take your call. ',
 	  { voice: 'alice' });

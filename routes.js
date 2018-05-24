@@ -36,7 +36,7 @@ router.get('/reply',function(req, res){
 	console.log('query params',JSON.stringify(q));
 	//var txt = q.SpeechResult.replace(/[+]/,' ');
 	//console.log('text',txt);
-	response.redirect({method:'GET'},encodeURIComponent('/answer?textResult='+q.SpeechResult));
+	response.redirect({method:'GET'},encodeURIComponent('/answer?SpeechResult='+q.SpeechResult));
 	res.writeHead(200, { 'Content-Type': 'text/xml' });
 	res.end(response.toString());
 });
@@ -57,10 +57,10 @@ router.get('/answer',function(req, res){
 	  action:'/reply',
 	  method:'GET'
 	});
-	if(req.query.textResult=='Hello'){
-		gather.say(req.query.textResult,{ voice: 'alice' });	
+	if(req.query.SpeechResult=='Hello'){
+		gather.say(req.query.SpeechResult,{ voice: 'alice' });	
 	}else{
-		gather.say(botRep[req.query.textResult],{ voice: 'alice' });	
+		gather.say(botRep[req.query.SpeechResult],{ voice: 'alice' });	
 	}
 	//gather.say(botRep[req.query.textResult],{ voice: 'alice' });	
 	res.writeHead(200, { 'Content-Type': 'text/xml' });
@@ -70,7 +70,7 @@ router.get('/answer',function(req, res){
 router.get('/call',function(req, res){		
 	client.calls
 	  .create({
-		url: 'https://fast-reef-26757.herokuapp.com/answer?textResult=Hello',
+		url: 'https://fast-reef-26757.herokuapp.com/answer?SpeechResult=Hello',
 		to: '+918500050085',
 		from: '+1 913-705-4764',
 		method:"GET"	

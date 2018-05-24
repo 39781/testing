@@ -11,15 +11,15 @@ const accountSid = 'AC233d3ebceafad1c7658d64dad3ae03bd';
 const authToken = '574bce6f3f25f3f744b1cf08e39ca8c3';
 const client = require('twilio')(accountSid, authToken);
 const VoiceResponse = require('twilio').twiml.VoiceResponse;
-
+var l = 1;
 var botRep={
-	"hello":"hello",
-	"Hi, How can I help you?":"Hi. I am calling to book an appointment for a client, Mr. John who wants to insure the assets of his candy manufacturing business. I am looking for your time , sometime tomorrow at 3 pm",
-	"I have another meeting at 3 pm which will get over by 4; so the earliest I can call Mr. John is around 4.15 pm":"Do you have any availability between 2 to 4 pm tomorrow?",
-	"Sure. I can call Mr. John at 2.30 pm tomorrow":"2.30 pm is fine",
-	"Can you provide the coordinates of Mr. John":"His mobile number is xxx xxx xxxx and his email id is xxxx@gmail.com",
-	"Thanks. I have made a note of it and I will call Mr. John at 2.30 pm tomorrow":"Sure. I will do that. Thanks",
-	"Great. Have a good day. Bye":"bye"
+	
+	1:"Hi. I am calling to book an appointment for a client, Mr. John who wants to insure the assets of his candy manufacturing business. I am looking for your time , sometime tomorrow at 3 pm",
+	2::"Do you have any availability between 2 to 4 pm tomorrow?",
+	3:"2.30 pm is fine",
+	4:"Can you provide the coordinates of Mr. John":"His mobile number is xxx xxx xxxx and his email id is xxxx@gmail.com",
+	5:"Sure. I will do that. Thanks",
+	6:"bye"
 }
 //var Authentication = require('./utilities/Authentication');
 
@@ -63,7 +63,7 @@ router.get('/answer',function(req, res){
 		gather.say(req.query.SpeechResult,{ voice: 'alice' });	
 	}else{
 		console.log('2');
-		gather.say(botRep[req.query.SpeechResult],{ voice: 'alice' });	
+		gather.say(botRep[l++],{ voice: 'alice' });	
 	}
 	//gather.say(botRep[req.query.textResult],{ voice: 'alice' });	
 	res.writeHead(200, { 'Content-Type': 'text/xml' });

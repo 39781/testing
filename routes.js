@@ -61,7 +61,7 @@ router.get('/answer',function(req, res){
 		gather.say(req.query.SpeechResult,{ voice: 'alice' });	
 	}else{
 		console.log('2');
-		gather.say(botRep[req.query.SpeechResult],{ voice: 'alice' });	
+		gather.say("hi how ru",{ voice: 'alice' });	
 	}
 	//gather.say(botRep[req.query.textResult],{ voice: 'alice' });	
 	res.writeHead(200, { 'Content-Type': 'text/xml' });

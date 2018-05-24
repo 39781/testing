@@ -36,8 +36,10 @@ router.get('/reply',function(req, res){
 	//var txt = q.SpeechResult.replace(/[+]/,' ');
 	//console.log('text',txt);
 	response.redirect({method:'GET'},'/answer?textResult='+q.SpeechResult);
-	res.end();
+	res.writeHead(200, { 'Content-Type': 'text/xml' });
+	res.end(response.toString());
 });
+
 router.get('/answer',function(req, res){
 	console.log('query',req.query,'params',req.params,'req received');
 	/*twimlResponse.say('Thanks for contacting our sales department. Our ' +
@@ -54,7 +56,7 @@ router.get('/answer',function(req, res){
 	  action:'/reply',
 	  method:'GET'
 	});
-	gather.say("Hello");	
+	gather.say(req.query.textResult,{ voice: 'alice' });	
 	res.writeHead(200, { 'Content-Type': 'text/xml' });
     res.end(response.toString());
 })

@@ -55,7 +55,7 @@ router.get('/answer',function(req, res){
 	  action:'/reply',
 	  method:'GET'
 	});
-	console.log(req,query,result);
+	console.log(req.query,result);
 	if(req.query.SpeechResult=='Hello'){
 		console.log('1');
 		gather.say(req.query.SpeechResult,{ voice: 'alice' });	

@@ -34,7 +34,7 @@ router.get('/reply',function(req, res){
 	var q = url.parse(req.url, true).query;
 	console.log('query params',JSON.stringify(q));
 	//var txt = q.SpeechResult.replace(/[+]/,' ');
-	console.log('text',txt);
+	//console.log('text',txt);
 	response.redirect({method:'GET'},'/answer?textResult='+q.SpeechResult);
 	res.end();
 });

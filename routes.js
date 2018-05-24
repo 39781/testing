@@ -63,10 +63,10 @@ router.get('/answer',function(req, res){
 	console.log(req.query.SpeechResult);
 	if(req.query.SpeechResult=='Hello'){
 		console.log('1');
-		gather.say(req.query.SpeechResult,{ voice: 'alice' });	
+		gather.say(req.query.SpeechResult,{ voice: 'woman' });	
 	}else{
 		console.log('2');
-		gather.say(botRep[l++],{ voice: 'alice' });	
+		gather.say(botRep[l++],{ voice: 'woman' });	
 	}
 	//gather.say(botRep[req.query.textResult],{ voice: 'alice' });	
 	res.writeHead(200, { 'Content-Type': 'text/xml' });

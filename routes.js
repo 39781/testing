@@ -82,8 +82,7 @@ router.get('/call',function(req, res){
 		from: '+1 913-705-4764',
 		method:"GET"	
 	  })
-	  .then(call => {
-			callHistroy
+	  .then(call => {			
 		  	console.log(JSON.stringify(call));					  
 	  })
 	  .catch(err => res.status(500).send(err));	

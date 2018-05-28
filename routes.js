@@ -101,8 +101,7 @@ router.get('/event',function(req, res){
 });
 
 router.post('/botHandler',function(req, res){			
-	console.log('req received');
-	console.log(JSON.stringify(req.body));
+	console.log('req received');	
 	var len = req.body.inputs.length;
 	var response = JSON.parse(JSON.stringify(config.responseObj));					
 	for(i=0; i<len; i++){		
@@ -116,8 +115,7 @@ router.post('/botHandler',function(req, res){
 						  console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
 						  console.log('body:', body); // Print the HTML for the Google homepage.
 					});
-				}
-				console.log(resp);	
+				}				
 				for(l=0;l<resp.result.fulfillment.messages.length;l++){
 					message = resp.result.fulfillment.messages[l];
 				//resp.result.fulfillment.messages.forEach(function(message){											

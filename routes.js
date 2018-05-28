@@ -31,18 +31,31 @@ router.get('/', function(req, res) {
 
 router.get('/reply',function(req, res){
 	const response = new VoiceResponse();
-	console.log(req.url);
+	console.log('req.query',req.query);
 	var q = url.parse(req.url, true).query;
 	console.log('query params',JSON.stringify(q));
 	//var txt = q.SpeechResult.replace(/[+]/,' ');
 	//console.log('text',txt);
-	if(/bye/ig.test(q.SpeechResult)){
-		response.hangup();
-	}else{
-		response.redirect({method:'GET'},'https://fast-reef-26757.herokuapp.com/answer?SpeechResult='+encodeURIComponent(q.SpeechResult));
-	}
-	res.writeHead(200, { 'Content-Type': 'text/xml' });
-	res.end(response.toString());
+	dialogflowAPI(q.SpeechResult, req.query.cid)
+	.then(function(resp){
+		for(l=0;l<resp.result.fulfillment.messages.length;l++){
+			message = resp.result.fulfillment.messages[l];
+		//resp.result.fulfillment.messages.forEach(function(message){											
+			if(message.platform=='google'&&message.type=="simple_response"){						
+				if(/bye/ig.test(message.textToSpeech)){
+					response.hangup();
+				}else{
+					response.redirect({method:'GET'},'https://fast-reef-26757.herokuapp.com/answer?SpeechResult='+encodeURIComponent(message.textToSpeech)+'&cid='+resp.result.sessionId);
+				}
+					res.writeHead(200, { 'Content-Type': 'text/xml' });
+					res.end(response.toString());
+					break;
+			}													
+		}		
+	})
+	.catch((err)=>{
+		console.log(err);
+	})		
 });
 
 router.get('/answer',function(req, res){	
@@ -57,7 +70,7 @@ router.get('/answer',function(req, res){
 	const gather = response.gather({
 	  input: 'speech dtmf',	  
 	  numDigits: 1,
-	  action:'/reply',
+	  action:'/reply?cid='+req.query.cid,
 	  method:'GET'
 	});
 	console.log(req.query.SpeechResult);
@@ -76,7 +89,7 @@ router.get('/answer',function(req, res){
 router.get('/call',function(req, res){		
 	client.calls
 	  .create({
-		url: 'https://fast-reef-26757.herokuapp.com/answer?SpeechResult=Hello',
+		url: 'https://fast-reef-26757.herokuapp.com/answer?SpeechResult=Hello&cid='+req.query.cid,
 		to: '+918500050085',
 		from: '+1 913-705-4764',
 		method:"GET"	
@@ -86,7 +99,8 @@ router.get('/call',function(req, res){
 	  })
 	  .catch(err => res.status(500).send(err));	
 });
-router.post('/evevnt',function(req, res){
+router.get('/event',function(req, res){
+	console.log(req.params, req.query);
 	console.log('event');
 	res.end();
 });
@@ -102,7 +116,7 @@ router.post('/botHandler',function(req, res){
 			dialogflowAPI(req.body.inputs[i].rawInputs[0].query, req.body.conversation.conversationId)
 			.then(function(resp){
 				if(resp.result.metadata.intentName == 'finalIntent'){
-					request('https://fast-reef-26757.herokuapp.com/call', function (error, response, body) {
+					request('https://fast-reef-26757.herokuapp.com/call?cid='+resp.result.sessionId, function (error, response, body) {
 						  console.log('error:', error); // Print the error if one occurred
 						  console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
 						  console.log('body:', body); // Print the HTML for the Google homepage.
@@ -120,7 +134,10 @@ router.post('/botHandler',function(req, res){
 					}									
 				};//);						
 				res.json(response).end();					
-			});			
+			})
+			.catch((err)=>{
+				console.log(err);
+			})	
 			break;
 		}else if(req.body.inputs[i].intent == 'actions.intent.MAIN'){			
 			simpleResponse(response, "Hi, I'm Macy. Your friendly Personal Assistant. How can I help you today?");

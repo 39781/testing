@@ -12,14 +12,7 @@ const authToken = '574bce6f3f25f3f744b1cf08e39ca8c3';
 const client = require('twilio')(accountSid, authToken);
 const VoiceResponse = require('twilio').twiml.VoiceResponse;
 var l = 1;
-var botRep={	
-	1:"Hi. I am calling to book an appointment for a client, Mr. John who wants to insure the assets of his candy manufacturing business. I am looking for your time , sometime tomorrow at 3 pm",
-	2:"Do you have any availability between 2 to 4 pm tomorrow?",
-	3:"2.30 pm is fine",
-	4:"His mobile number is xxx xxx xxxx and his email id is xxxx@gmail.com",
-	5:"Sure. I will do that. Thanks",
-	6:"bye"
-}
+
 //var Authentication = require('./utilities/Authentication');
 
 
@@ -90,7 +83,8 @@ router.get('/call',function(req, res){
 		method:"GET"	
 	  })
 	  .then(call => {
-		  	console.log(call.sid);					  
+			callHistroy
+		  	console.log(JSON.stringify(call));					  
 	  })
 	  .catch(err => res.status(500).send(err));	
 });
@@ -115,18 +109,21 @@ router.post('/botHandler',function(req, res){
 						  console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
 						  console.log('body:', body); // Print the HTML for the Google homepage.
 					});
-				}				
-				for(l=0;l<resp.result.fulfillment.messages.length;l++){
-					message = resp.result.fulfillment.messages[l];
-				//resp.result.fulfillment.messages.forEach(function(message){											
-					if(message.platform=='google'&&message.type=="simple_response"){						
-						simpleResponse(response, message.textToSpeech);
-					}	
-					if(message.platform=='google'&&message.type=="suggestion_chips"){
-						sugesstionChips(response, message.suggestions);
-					}									
-				};//);						
-				res.json(response).end();					
+					
+				}else{
+					for(l=0;l<resp.result.fulfillment.messages.length;l++){
+						message = resp.result.fulfillment.messages[l];
+					//resp.result.fulfillment.messages.forEach(function(message){											
+						if(message.platform=='google'&&message.type=="simple_response"){						
+							simpleResponse(response, message.textToSpeech);
+						}	
+						if(message.platform=='google'&&message.type=="suggestion_chips"){
+							sugesstionChips(response, message.suggestions);
+						}					
+					};
+					res.json(response).end();
+				}					
+				//);						
 			})
 			.catch((err)=>{
 				console.log(err);

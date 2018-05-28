@@ -32,11 +32,10 @@ router.get('/', function(req, res) {
 router.get('/reply',function(req, res){
 	const response = new VoiceResponse();
 	console.log('req.query',req.query);
-	var q = url.parse(req.url, true).query;
-	console.log('query params',JSON.stringify(q));
+	
 	//var txt = q.SpeechResult.replace(/[+]/,' ');
 	//console.log('text',txt);
-	dialogflowAPI(q.SpeechResult, req.query.cid)
+	dialogflowAPI(req.query.SpeechResult, req.query.cid)
 	.then(function(resp){
 		for(l=0;l<resp.result.fulfillment.messages.length;l++){
 			message = resp.result.fulfillment.messages[l];
@@ -45,7 +44,7 @@ router.get('/reply',function(req, res){
 				if(/bye/ig.test(message.textToSpeech)){
 					response.hangup();
 				}else{
-					response.redirect({method:'GET'},'https://fast-reef-26757.herokuapp.com/answer?SpeechResult='+encodeURIComponent(message.textToSpeech)+'&cid='+resp.result.sessionId);
+					response.redirect({method:'GET'},'https://fast-reef-26757.herokuapp.com/answer?SpeechResult='+encodeURIComponent(message.textToSpeech)+'&cid='+resp.sessionId);
 				}
 					res.writeHead(200, { 'Content-Type': 'text/xml' });
 					res.end(response.toString());
@@ -116,7 +115,7 @@ router.post('/botHandler',function(req, res){
 			dialogflowAPI(req.body.inputs[i].rawInputs[0].query, req.body.conversation.conversationId)
 			.then(function(resp){
 				if(resp.result.metadata.intentName == 'finalIntent'){
-					request('https://fast-reef-26757.herokuapp.com/call?cid='+resp.result.sessionId, function (error, response, body) {
+					request('https://fast-reef-26757.herokuapp.com/call?cid='+resp.sessionId, function (error, response, body) {
 						  console.log('error:', error); // Print the error if one occurred
 						  console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
 						  console.log('body:', body); // Print the HTML for the Google homepage.
@@ -165,7 +164,7 @@ var dialogflowAPI = function(input, sessId){
 		request(options, function (error, response, body) {
 			if(error){
 				res.json({error:"error in chat server api call"}).end();
-			}else{											
+			}else{						
 				resolve(body);
 			}		
 		});			

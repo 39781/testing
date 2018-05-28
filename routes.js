@@ -36,6 +36,9 @@ router.get('/reply',function(req, res){
 			if(message.platform=='google'&&message.type=="simple_response"){						
 				if(/bye/ig.test(message.textToSpeech)){
 					response.hangup();
+					callHistory[resp.sessionId]={
+						status:'end'
+					}
 				}else{
 					response.redirect({method:'GET'},'https://fast-reef-26757.herokuapp.com/answer?SpeechResult='+encodeURIComponent(message.textToSpeech)+'&cid='+resp.sessionId);
 				}
@@ -74,7 +77,12 @@ router.get('/answer',function(req, res){
     res.end(response.toString());
 })
 
-router.get('/call',function(req, res){		
+router.get('/call',function(req, res){
+	if(typeof(callHistory[req.query.cid])=='undefined'){
+		callHistory[req.query.cid]={
+			status:'calling'
+		}
+	}
 	client.calls
 	  .create({
 		url: 'https://fast-reef-26757.herokuapp.com/answer?SpeechResult=Hello&cid='+req.query.cid,
@@ -82,10 +90,18 @@ router.get('/call',function(req, res){
 		from: '+1 913-705-4764',
 		method:"GET"	
 	  })
-	  .then(call => {			
+	  .then(call => {	
+		callHistory[req.query.cid]={
+			status:'started'
+		}	  
 		  	console.log(JSON.stringify(call));					  
 	  })
-	  .catch(err => res.status(500).send(err));	
+	  .catch(err =>
+			{ callHistory[req.query.cid]={
+				status:'error'
+			};
+			res.status(500).send(err);
+	  });	
 });
 router.get('/event',function(req, res){
 	console.log(req.params, req.query);
@@ -108,7 +124,12 @@ router.post('/botHandler',function(req, res){
 						  console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
 						  console.log('body:', body); // Print the HTML for the Google homepage.
 					});
-					
+					setTimeout(function(){
+						if(callHistory[resp.sessionId] == 'end'){
+							simpleResponse(response, "Sorry for the wait Mr. John");
+							res.json(response).end();
+						}
+					},1000*60);
 				}else{
 					for(l=0;l<resp.result.fulfillment.messages.length;l++){
 						message = resp.result.fulfillment.messages[l];

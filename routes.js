@@ -118,29 +118,24 @@ router.post('/botHandler',function(req, res){
 		if(req.body.inputs[i].intent == 'actions.intent.TEXT'){
 			dialogflowAPI(req.body.inputs[i].rawInputs[0].query, req.body.conversation.conversationId)
 			.then(function(resp){
+				for(l=0;l<resp.result.fulfillment.messages.length;l++){
+					message = resp.result.fulfillment.messages[l];
+				//resp.result.fulfillment.messages.forEach(function(message){											
+					if(message.platform=='google'&&message.type=="simple_response"){						
+						simpleResponse(response, message.textToSpeech);
+					}	
+					if(message.platform=='google'&&message.type=="suggestion_chips"){
+						sugesstionChips(response, message.suggestions);
+					}					
+				};
 				if(resp.result.metadata.intentName == 'finalIntent'){
 					request('https://fast-reef-26757.herokuapp.com/call?cid='+resp.sessionId, function (error, response, body) {
 						  console.log('error:', error); // Print the error if one occurred
 						  console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
 						  console.log('body:', body); // Print the HTML for the Google homepage.
-					});
-					setTimeout(function(){
-						if(callHistory[resp.sessionId] == 'end'){
-							simpleResponse(response, "Sorry for the wait Mr. John");
-							res.json(response).end();
-						}
-					},1000*60);
+					});												
+					res.json(response).end();
 				}else{
-					for(l=0;l<resp.result.fulfillment.messages.length;l++){
-						message = resp.result.fulfillment.messages[l];
-					//resp.result.fulfillment.messages.forEach(function(message){											
-						if(message.platform=='google'&&message.type=="simple_response"){						
-							simpleResponse(response, message.textToSpeech);
-						}	
-						if(message.platform=='google'&&message.type=="suggestion_chips"){
-							sugesstionChips(response, message.suggestions);
-						}					
-					};
 					res.json(response).end();
 				}					
 				//);						
@@ -189,6 +184,7 @@ var simpleResponse = function(response, responseText){
 			"displayText": responseText
 		}
 	});	
+	return response;
 }
 
 var sugesstionChips = function(response, suggestions){

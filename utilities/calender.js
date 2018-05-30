@@ -10,7 +10,7 @@ const TOKEN_PATH = 'credentials.json';
 var calender = {
 	createEvent:function(){
 		try {
-		  const content = fs.readFileSync('client_secret.json');
+		  const content = fs.readFileSync('./utilities/client_secret.json');
 		  return authorize(JSON.parse(content), createEvent);
 		} catch (err) {
 		  return console.log('Error loading client secret file:', err);

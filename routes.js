@@ -7,6 +7,8 @@ var url				= require('url')
 var path			= require("path");	
 var config			= require('./config');	
 const uuidv1 		= require('uuid/v1');
+var mail			= require('./utilities/mail');
+var calendar		= require('./utilities/calender.js');	
 const accountSid = 'AC233d3ebceafad1c7658d64dad3ae03bd';
 const authToken = '574bce6f3f25f3f744b1cf08e39ca8c3';
 const client = require('twilio')(accountSid, authToken);
@@ -32,7 +34,10 @@ router.get('/reply',function(req, res){
 	.then(function(resp){
 		for(l=0;l<resp.result.fulfillment.messages.length;l++){
 			message = resp.result.fulfillment.messages[l];
-		//resp.result.fulfillment.messages.forEach(function(message){											
+		//resp.result.fulfillment.messages.forEach(function(message){
+			if(resp.result.metadata.intentName == 'IAConversation5'){
+				calendar.createEvent();		
+			}
 			if(message.platform=='google'&&message.type=="simple_response"){						
 				if(/bye/ig.test(message.textToSpeech)){
 					response.hangup();
@@ -127,7 +132,7 @@ router.post('/botHandler',function(req, res){
 					if(message.platform=='google'&&message.type=="suggestion_chips"){
 						sugesstionChips(response, message.suggestions);
 					}					
-				};
+				};				
 				if(resp.result.metadata.intentName == 'finalIntent'){
 					request('https://fast-reef-26757.herokuapp.com/call?cid='+resp.sessionId, function (error, response, body) {
 						  console.log('error:', error); // Print the error if one occurred

@@ -70,7 +70,7 @@ router.get('/answer',function(req, res){
 	const gather = response.gather({
 	  input: 'speech dtmf',	  
 	  numDigits: 1,
-	  timeout:2,
+	  timeout:3,
 	  action:'/reply?cid='+req.query.cid,
 	  method:'GET'
 	});

@@ -11,7 +11,7 @@ var calender = {
 	createEvent:function(){
 		try {
 		  const content = fs.readFileSync('client_secret.json');
-		  authorize(JSON.parse(content), createEvent);
+		  return authorize(JSON.parse(content), createEvent);
 		} catch (err) {
 		  return console.log('Error loading client secret file:', err);
 		}
@@ -38,7 +38,7 @@ function authorize(credentials, callback) {
     return getAccessToken(oAuth2Client, callback);
   }
   oAuth2Client.setCredentials(JSON.parse(token));
-  callback(oAuth2Client);
+  return callback(oAuth2Client);
 }
 
 /**
@@ -69,7 +69,7 @@ function getAccessToken(oAuth2Client, callback) {
       } catch (err) {
         console.error(err);
       }
-      callback(oAuth2Client);
+      return callback(oAuth2Client);
     });
   });
 }
@@ -90,7 +90,7 @@ function createEvent(auth) {
 		console.log('There was an error contacting the Calendar service: ' + err);
 		return;
 	  }
-	  console.log('Event created: ', logInfo,logInfo.htmlLink);
+	  return logInfo.htmlLink;
 	});
 }
 

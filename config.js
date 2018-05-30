@@ -27,7 +27,7 @@ module.exports = {
 		'location': 'via phone',
 		'description': 'Mr. Jhon need help regarding insurance coverage for assets.',
 		'organizer': {
-			'email': 'hexatestmailer@gmail.com',
+			'email': 'hex.digitalinsurer@gmail.com',
 			'self': true
 		},
 		'start': {

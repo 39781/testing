@@ -85,11 +85,7 @@ router.get('/answer',function(req, res){
 })
 
 router.get('/call',function(req, res){
-	if(typeof(callHistory[req.query.cid])=='undefined'){
-		callHistory[req.query.cid]={
-			status:'calling'
-		}
-	}
+	
 	client.calls
 	  .create({
 		url: 'https://fast-reef-26757.herokuapp.com/answer?SpeechResult=Hello&cid='+req.query.cid,
@@ -97,16 +93,10 @@ router.get('/call',function(req, res){
 		from: '+1 913-705-4764',
 		method:"GET"	
 	  })
-	  .then(call => {	
-		callHistory[req.query.cid]={
-			status:'started'
-		}	  
+	  .then(call => {			  
 		  	console.log(JSON.stringify(call));					  
 	  })
-	  .catch(err =>
-			{ callHistory[req.query.cid]={
-				status:'error'
-			};
+	  .catch(err =>			
 			res.status(500).send(err);
 	  });	
 });

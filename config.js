@@ -53,6 +53,6 @@ module.exports = {
 			],
 		},
 	},
-	botResponses:["Hello","Hi. I am calling to book an appointment for a client, Mr. John who wants to insure the assets of his candy manufacturing business. I am looking for your time , sometime tomorrow at 3 pm","Okay","Oh","Do you have any availability between 2 to 4 pm tomorrow?","2.30 pm is fine","His mobile number is 7 2 0 0  0 5 0 0 8 5 and his email id is b h a r i p r a s a d . m s c @gmail.com","Great","Sure. I will do that. Thanks"]	
+	botResponses:["Hi. I am calling to book an appointment for a client, Mr. John who wants to insure the assets of his candy manufacturing business. I am looking for your time , sometime tomorrow at 3 pm","Okay","Oh","Do you have any availability between 2 to 4 pm tomorrow?","2.30 pm is fine","His mobile number is 7 2 0 0  0 5 0 0 8 5 and his email id is b h a r i p r a s a d . m s c @gmail.com","Great","Sure. I will do that. Thanks"]	
 }
 

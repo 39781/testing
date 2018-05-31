@@ -69,8 +69,7 @@ router.get('/answer',function(req, res){
         res.send(twimlResponse.toString());*/    
 	const gather = response.gather({
 	  input: 'speech dtmf',	  
-	  numDigits: 1,
-	  timeout:3,
+	  numDigits: 1,	  
 	  action:'/reply?cid='+req.query.cid,
 	  method:'GET'
 	});

@@ -39,6 +39,7 @@ router.get('/reply',function(req, res){
 			}
 			if(message.platform=='google'&&message.type=="simple_response"){						
 				if(/bye/ig.test(message.textToSpeech)){
+					callHistory[resp.sessionId] = 'end';
 					response.hangup();					
 				}else{					
 					if(resp.result.metadata.intentName == 'Default Fallback Intent'&&k<7){
@@ -60,7 +61,7 @@ router.get('/reply',function(req, res){
 });
 
 router.get('/answer',function(req, res){	
-	const response = new VoiceResponse();
+	const response = new VoiceResponse();	
 	/*twimlResponse.say('Thanks for contacting our sales department. Our ' +
 	  'next available representative will take your call. ',
 	  { voice: 'alice' });
@@ -82,10 +83,9 @@ router.get('/answer',function(req, res){
 	//gather.say(botRep[req.query.textResult],{ voice: 'alice' });	
 	res.writeHead(200, { 'Content-Type': 'text/xml' });
     res.end(response.toString());
-})
+});
 
-router.get('/call',function(req, res){
-	
+router.get('/call',function(req, res){	
 	client.calls
 	  .create({
 		url: 'https://fast-reef-26757.herokuapp.com/answer?SpeechResult=Hello&cid='+req.query.cid,
@@ -93,11 +93,13 @@ router.get('/call',function(req, res){
 		from: '+1 913-705-4764',
 		method:"GET"	
 	  })
-	  .then(call => {			  
-		  	console.log(JSON.stringify(call));					  
+	  .then(call => {
+			callHistory[req.query.cid] = 'inCall';		  
+		  	res.status(200).send("started");
 	  })
 	  .catch(err =>	{		
 			res.status(500).send(err);
+			callHistory[req.query.cid] = 'callNotConnected';		  
 	  });	
 });
 router.get('/event',function(req, res){
@@ -117,7 +119,10 @@ router.post('/botHandler',function(req, res){
 			.then(function(resp){
 				for(l=0;l<resp.result.fulfillment.messages.length;l++){
 					message = resp.result.fulfillment.messages[l];
-				//resp.result.fulfillment.messages.forEach(function(message){											
+				//resp.result.fulfillment.messages.forEach(function(message){		
+					if(resp.result.metadata.intentName == 'customerFindReq'&&callHistory[resp.sessionId] != 'end'){
+						message.textToSpeech = config.waitResponses[callHistory[resp.sessionId]];
+					}						
 					if(message.platform=='google'&&message.type=="simple_response"){						
 						simpleResponse(response, message.textToSpeech);
 					}	

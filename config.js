@@ -52,6 +52,6 @@ module.exports = {
 				{'method': 'popup', 'minutes': 10},
 			],
 		},
-	}
+	}	
 }
 

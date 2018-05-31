@@ -40,10 +40,7 @@ router.get('/reply',function(req, res){
 			}
 			if(message.platform=='google'&&message.type=="simple_response"){						
 				if(/bye/ig.test(message.textToSpeech)){
-					response.hangup();
-					callHistory[resp.sessionId]={
-						status:'end'
-					}
+					response.hangup();					
 				}else{
 					response.redirect({method:'GET'},'https://fast-reef-26757.herokuapp.com/answer?SpeechResult='+encodeURIComponent(message.textToSpeech)+'&cid='+resp.sessionId);
 				}
@@ -76,7 +73,7 @@ router.get('/answer',function(req, res){
 	});
 	console.log(req.query.SpeechResult);
 	
-	gather.say(req.query.SpeechResult,{ voice: 'woman' });	
+	gather.say(req.query.SpeechResult,{voice: 'woman'});	
 	
 	//gather.say(botRep[req.query.textResult],{ voice: 'alice' });	
 	res.writeHead(200, { 'Content-Type': 'text/xml' });

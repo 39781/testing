@@ -41,6 +41,7 @@ router.get('/reply',function(req, res){
 				if(/bye/ig.test(message.textToSpeech)){
 					response.hangup();					
 				}else{
+					console.log('l value',l);
 					if(resp.result.metadata.intentName == 'Default Fallback Intent'){
 						message.textToSpeech = config.botResponses[l];
 					}

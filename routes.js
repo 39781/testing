@@ -86,6 +86,7 @@ router.get('/answer',function(req, res){
 });
 
 router.get('/call',function(req, res){	
+	callHistory[req.query.cid] = 'calling';
 	client.calls
 	  .create({
 		url: 'https://fast-reef-26757.herokuapp.com/answer?SpeechResult=Hello&cid='+req.query.cid,

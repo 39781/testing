@@ -55,6 +55,7 @@ module.exports = {
 	},
 	botResponses:["Hi. I am calling to book an appointment for a client, Mr. John who wants to insure the assets of his candy manufacturing business. I am looking for your time , sometime tomorrow at 3 pm","Okay","Oh","Do you have any availability between 2 to 4 pm tomorrow?","2.30 pm is fine","His mobile number is 7 2 0 0  0 5 0 0 8 5 and his email id is b h a r i p r a s a d . m s c @gmail.com","Great","Sure. I will do that. Thanks"],
 	waitResponses:{
+		"calling":"Sorry for the wait Mr. John, dialing going please will hold few minutes",
 		"inCall":"Sorry for the wait Mr. John, I am talking with IA please wait one minute I will update appointment confirmation",
 		"callNotConnected":"Sorry for the wait Mr. John, Right now I am unable to find IA, I will update appointment confirmation later"
 	}	

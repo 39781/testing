@@ -67,8 +67,9 @@ router.get('/answer',function(req, res){
 	  { voice: 'alice' });
 
 	twimlResponse.dial(salesNumber);
-
+	
         res.send(twimlResponse.toString());*/    
+		callHistory[req.query.cid] = 'inCall';
 	const gather = response.gather({
 	  input: 'speech dtmf',	  
 	  numDigits: 1,	  
@@ -95,7 +96,7 @@ router.get('/call',function(req, res){
 		method:"GET"	
 	  })
 	  .then(call => {
-			callHistory[req.query.cid] = 'inCall';		  
+			callHistory[req.query.cid] = 'dialing';		  
 		  	res.status(200).send("started");
 	  })
 	  .catch(err =>	{		

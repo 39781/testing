@@ -96,7 +96,7 @@ router.get('/call',function(req, res){
 	  .then(call => {			  
 		  	console.log(JSON.stringify(call));					  
 	  })
-	  .catch(err =>			
+	  .catch(err =>	{		
 			res.status(500).send(err);
 	  });	
 });

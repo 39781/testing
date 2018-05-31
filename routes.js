@@ -25,7 +25,7 @@ router.get('/', function(req, res) {
 
 router.get('/reply',function(req, res){
 	const response = new VoiceResponse();
-	console.log('req.query',req.query);
+	console.log('req.query',req.query.SpeechResult);
 	
 	//var txt = q.SpeechResult.replace(/[+]/,' ');
 	//console.log('text',txt);
@@ -41,10 +41,10 @@ router.get('/reply',function(req, res){
 				if(/bye/ig.test(message.textToSpeech)){
 					response.hangup();					
 				}else{					
-					if(resp.result.metadata.intentName == 'Default Fallback Intent'){
+					if(resp.result.metadata.intentName == 'Default Fallback Intent'&&k<7){
 						console.log('k value',k);
-						message.textToSpeech = config.botResponses[k];
-					}
+						message.textToSpeech = config.botResponses[k];						
+					}					
 					k++;
 					response.redirect({method:'GET'},'https://fast-reef-26757.herokuapp.com/answer?SpeechResult='+encodeURIComponent(message.textToSpeech)+'&cid='+resp.sessionId);
 				}

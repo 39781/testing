@@ -13,8 +13,7 @@ const accountSid = 'AC233d3ebceafad1c7658d64dad3ae03bd';
 const authToken = '574bce6f3f25f3f744b1cf08e39ca8c3';
 const client = require('twilio')(accountSid, authToken);
 const VoiceResponse = require('twilio').twiml.VoiceResponse;
-var l = 1;
-
+var l = 0;
 //var Authentication = require('./utilities/Authentication');
 
 
@@ -42,6 +41,10 @@ router.get('/reply',function(req, res){
 				if(/bye/ig.test(message.textToSpeech)){
 					response.hangup();					
 				}else{
+					if(resp.result.metadata.intentName == 'Default Fallback Intent'){
+						message.textToSpeech = config.botResponses[l];
+					}
+					l++;
 					response.redirect({method:'GET'},'https://fast-reef-26757.herokuapp.com/answer?SpeechResult='+encodeURIComponent(message.textToSpeech)+'&cid='+resp.sessionId);
 				}
 					res.writeHead(200, { 'Content-Type': 'text/xml' });

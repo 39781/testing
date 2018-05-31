@@ -40,9 +40,9 @@ router.get('/reply',function(req, res){
 			if(message.platform=='google'&&message.type=="simple_response"){						
 				if(/bye/ig.test(message.textToSpeech)){
 					response.hangup();					
-				}else{
-					console.log('l value',l);
+				}else{					
 					if(resp.result.metadata.intentName == 'Default Fallback Intent'){
+						console.log('k value',k);
 						message.textToSpeech = config.botResponses[k];
 					}
 					k++;

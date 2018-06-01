@@ -42,8 +42,9 @@ module.exports = {
 			'RRULE:FREQ=DAILY;COUNT=2'
 		],
 		'attendees': [
-			{'email': 'BH@hexaware.com'},
 			{'email': 'bhariprasad.msc@gmail.com'},
+			{'email': 'MadhurV@hexaware.com'},
+			{'email': 'MukundanM@hexaware.com'},
 		],
 		'reminders': {
 			'useDefault': false,

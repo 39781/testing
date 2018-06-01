@@ -43,11 +43,9 @@ router.get('/reply',function(req, res){
 					response.hangup();					
 				}else{				
 					console.log('k value',k);				
-					if(resp.result.metadata.intentName == 'Default Fallback Intent'&&k<7){
-						
-						message.textToSpeech = config.botResponses[k];						
-					}					
-					k++;
+					if(resp.result.metadata.intentName == 'Default Fallback Intent'&&req.query.repl<7){						
+						message.textToSpeech = config.botResponses[req.query.repl];						
+					}									
 					response.redirect({method:'GET'},'https://fast-reef-26757.herokuapp.com/answer?SpeechResult='+encodeURIComponent(message.textToSpeech)+'&cid='+resp.sessionId);
 				}
 					res.writeHead(200, { 'Content-Type': 'text/xml' });
@@ -75,7 +73,7 @@ router.get('/answer',function(req, res){
 	  input: 'speech dtmf',	  
 	  numDigits: 1,	  
 	  speechTimeout:'auto',
-	  action:'/reply?cid='+req.query.cid,
+	  action:'/reply?cid='+req.query.cid+'&repl='+(k++),
 	  method:'GET'
 	});
 	console.log(req.query.SpeechResult);

@@ -79,7 +79,7 @@ router.get('/answer',function(req, res){
 	console.log(req.query.SpeechResult);
 	
 	gather.say(req.query.SpeechResult,{voice: 'woman'});	
-	
+	response.redirect({method:'GET'},'https://fast-reef-26757.herokuapp.com/answer?SpeechResult='+encodeURIComponent("are you there ")+'&cid='+resp.sessionId);
 	//gather.say(botRep[req.query.textResult],{ voice: 'alice' });	
 	res.writeHead(200, { 'Content-Type': 'text/xml' });
     res.end(response.toString());

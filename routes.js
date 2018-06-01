@@ -41,9 +41,10 @@ router.get('/reply',function(req, res){
 				if(/bye/ig.test(message.textToSpeech)){
 					callHistory[resp.sessionId] = 'end';
 					response.hangup();					
-				}else{					
+				}else{				
+					console.log('k value',k);				
 					if(resp.result.metadata.intentName == 'Default Fallback Intent'&&k<7){
-						console.log('k value',k);
+						
 						message.textToSpeech = config.botResponses[k];						
 					}					
 					k++;
@@ -87,7 +88,6 @@ router.get('/answer',function(req, res){
 });
 
 router.get('/call',function(req, res){	
-	callHistory[req.query.cid] = 'calling';
 	client.calls
 	  .create({
 		url: 'https://fast-reef-26757.herokuapp.com/answer?SpeechResult=Hello&cid='+req.query.cid,

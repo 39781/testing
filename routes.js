@@ -97,8 +97,7 @@ router.get('/call',function(req, res){
 		from: '+1 281-843-9288 ',
 		method:"GET"	
 	  })
-	  .then(call => {
-			
+	  .then(call => {			
 			callHistory[req.query.cid] = 'dialing';		  
 		  	res.status(200).send("started");
 	  })
@@ -115,6 +114,7 @@ router.get('/event',function(req, res){
 
 router.post('/botHandler',function(req, res){			
 	console.log('req received');	
+	callHistory[req.body.conversation.conversationId] = 'idle';
 	var len = req.body.inputs.length;
 	var response = JSON.parse(JSON.stringify(config.responseObj));					
 	for(i=0; i<len; i++){		

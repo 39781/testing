@@ -32,6 +32,7 @@ router.get('/reply',function(req, res){
 	//req.query.SpeechResult
 	dialogflowAPI(config.IAQuestions[req.query.repl], req.query.cid)
 	.then(function(resp){
+		k++;
 		for(l=0;l<resp.result.fulfillment.messages.length;l++){
 			message = resp.result.fulfillment.messages[l];
 		//resp.result.fulfillment.messages.forEach(function(message){
@@ -74,7 +75,7 @@ router.get('/answer',function(req, res){
 	  input: 'speech dtmf',	  
 	  numDigits: 1,	  
 	  speechTimeout:'auto',
-	  action:'/reply?cid='+req.query.cid+'&repl='+(k++),
+	  action:'/reply?cid='+req.query.cid+'&repl='+(k),
 	  method:'GET'
 	});
 	console.log(req.query.SpeechResult);

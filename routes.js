@@ -29,7 +29,8 @@ router.get('/reply',function(req, res){
 	
 	//var txt = q.SpeechResult.replace(/[+]/,' ');
 	//console.log('text',txt);
-	dialogflowAPI(req.query.SpeechResult, req.query.cid)
+	//req.query.SpeechResult
+	dialogflowAPI(config.IAQuestions[req.query.repl], req.query.cid)
 	.then(function(resp){
 		for(l=0;l<resp.result.fulfillment.messages.length;l++){
 			message = resp.result.fulfillment.messages[l];
@@ -86,6 +87,7 @@ router.get('/answer',function(req, res){
 });
 
 router.get('/call',function(req, res){	
+		k=0;
 	client.calls
 	  .create({
 		url: 'https://fast-reef-26757.herokuapp.com/answer?SpeechResult=Hello&cid='+req.query.cid,
@@ -95,6 +97,7 @@ router.get('/call',function(req, res){
 		method:"GET"	
 	  })
 	  .then(call => {
+			
 			callHistory[req.query.cid] = 'dialing';		  
 		  	res.status(200).send("started");
 	  })

@@ -30,7 +30,7 @@ router.get('/reply',function(req, res){
 	//var txt = q.SpeechResult.replace(/[+]/,' ');
 	//console.log('text',txt);
 	//req.query.SpeechResult
-	dialogflowAPI(config.IAQuestions[req.query.repl], req.query.cid)
+	dialogflowAPI(req.query.SpeechResult, req.query.cid)
 	.then(function(resp){
 		k++;
 		for(l=0;l<resp.result.fulfillment.messages.length;l++){
@@ -44,8 +44,9 @@ router.get('/reply',function(req, res){
 					callHistory[resp.sessionId] = 'end';
 					response.hangup();					
 				}else{				
-					console.log('k value',k);				
-					if(resp.result.metadata.intentName == 'Default Fallback Intent'&&req.query.repl<7){						
+					
+					if(resp.result.metadata.intentName == 'Default Fallback Intent'&&req.query.repl<7){
+						console.log('k value',k);										
 						message.textToSpeech = config.botResponses[req.query.repl];						
 					}									
 					response.redirect({method:'GET'},'https://fast-reef-26757.herokuapp.com/answer?SpeechResult='+encodeURIComponent(message.textToSpeech)+'&cid='+resp.sessionId);

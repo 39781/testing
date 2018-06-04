@@ -61,6 +61,7 @@ router.get('/reply',function(req, res){
 	})		
 });
 
+
 router.get('/answer',function(req, res){	
 	const response = new VoiceResponse();	
 	/*twimlResponse.say('Thanks for contacting our sales department. Our ' +
@@ -74,6 +75,7 @@ router.get('/answer',function(req, res){
 	const gather = response.gather({
 	  input: 'speech dtmf',	  
 	  numDigits: 1,	  
+	  hints:"word, a phrase, another longer phrase, term, thing, proper product name",
 	  speechTimeout:'auto',
 	  action:'/reply?cid='+req.query.cid+'&repl='+(k),
 	  method:'GET'
@@ -86,6 +88,8 @@ router.get('/answer',function(req, res){
 	res.writeHead(200, { 'Content-Type': 'text/xml' });
     res.end(response.toString());
 });
+
+
 
 router.get('/call',function(req, res){	
 		k=0;
@@ -106,11 +110,16 @@ router.get('/call',function(req, res){
 			callHistory[req.query.cid] = 'callNotConnected';		  
 	  });	
 });
+
+
+
 router.get('/event',function(req, res){
 	console.log(req.params, req.query);
 	console.log('event');
 	res.end();
 });
+
+
 
 router.post('/botHandler',function(req, res){			
 	console.log('req received');	
@@ -159,6 +168,8 @@ router.post('/botHandler',function(req, res){
 	}	
 });
 
+
+
 var dialogflowAPI = function(input, sessId){	
 	return new Promise(function(resolve, reject){
 		var options = { 
@@ -184,6 +195,8 @@ var dialogflowAPI = function(input, sessId){
 	});
 }
 
+
+
 var simpleResponse = function(response, responseText){
 	response.expectedInputs[0].inputPrompt.richInitialPrompt.items.push({
 		"simpleResponse": {
@@ -194,10 +207,15 @@ var simpleResponse = function(response, responseText){
 	return response;
 }
 
+
+
 var sugesstionChips = function(response, suggestions){
 	console.log(suggestions);
 	response.expectedInputs[0].inputPrompt.richInitialPrompt.suggestions = suggestions;	
 }
+
+
+
 module.exports = router;
 
 

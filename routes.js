@@ -77,6 +77,7 @@ router.get('/answer',function(req, res){
 	  numDigits: 1,	  
 	  hints:"word, a phrase, another longer phrase, term, thing, proper product name",
 	  speechTimeout:'auto',
+	  language:"en-IN",
 	  action:'/reply?cid='+req.query.cid+'&repl='+(k),
 	  method:'GET'
 	});

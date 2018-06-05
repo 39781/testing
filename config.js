@@ -31,11 +31,11 @@ module.exports = {
 			'self': true
 		},
 		'start': {
-			'dateTime': '2018-06-28T09:00:00-07:00',
+			'dateTime': '2018-06-10T09:00:00-07:00',
 			'timeZone': 'Asia/Kolkata',
 		},
 		'end': {
-			'dateTime': '2018-06-28T17:00:00-07:00',
+			'dateTime': '2018-06-10T17:00:00-07:00',
 			'timeZone': 'Asia/Kolkata',
 		},
 		'recurrence': [

@@ -43,8 +43,7 @@ module.exports = {
 		],
 		'attendees': [
 			{'email': 'bhariprasad.msc@gmail.com'},
-			{'email': 'MadhurV@hexaware.com'},
-			{'email': 'MukundanM@hexaware.com'},
+			{'email': 'BH@hexaware.com'}			
 		],
 		'reminders': {
 			'useDefault': false,

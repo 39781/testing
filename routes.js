@@ -36,6 +36,7 @@ router.get('/reply',function(req, res){
 		for(l=0;l<resp.result.fulfillment.messages.length;l++){
 			message = resp.result.fulfillment.messages[l];
 		//resp.result.fulfillment.messages.forEach(function(message){
+			console.log(resp.result.metadata.intentName);
 			if(resp.result.metadata.intentName == 'IAConversation7'){
 				calendar.createEvent();		
 			}

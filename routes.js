@@ -44,17 +44,16 @@ router.get('/reply',function(req, res){
 				if(/bye/ig.test(message.textToSpeech)){
 					callHistory[resp.sessionId] = 'end';
 					response.hangup();					
-				}else{				
-					
-					if(resp.result.metadata.intentName == 'Default Fallback Intent'&&req.query.repl<7){
+				}else{									
+					/*if(resp.result.metadata.intentName == 'Default Fallback Intent'&&req.query.repl<7){
 						console.log('k value',k);										
 						message.textToSpeech = config.botResponses[req.query.repl];						
-					}									
+					}*/									
 					response.redirect({method:'GET'},'https://fast-reef-26757.herokuapp.com/answer?SpeechResult='+encodeURIComponent(message.textToSpeech)+'&cid='+resp.sessionId);
 				}
-					res.writeHead(200, { 'Content-Type': 'text/xml' });
-					res.end(response.toString());
-					break;
+				res.writeHead(200, { 'Content-Type': 'text/xml' });
+				res.end(response.toString());
+				break;
 			}													
 		}		
 	})
@@ -80,7 +79,7 @@ router.get('/answer',function(req, res){
 	  hints:"word, a phrase, another longer phrase, term, thing, proper product name",
 	  speechTimeout:'auto',
 	  language:"en-IN",
-	  action:'/reply?cid='+req.query.cid+'&repl='+(k),
+	  action:'/reply?cid='+req.query.cid,
 	  method:'GET'
 	});
 	console.log(req.query.SpeechResult);
@@ -95,7 +94,7 @@ router.get('/answer',function(req, res){
 
 
 router.get('/call',function(req, res){	
-		k=0;
+		
 	client.calls
 	  .create({
 		url: 'https://fast-reef-26757.herokuapp.com/answer?SpeechResult=Hello&cid='+req.query.cid,
@@ -126,7 +125,7 @@ router.get('/event',function(req, res){
 
 router.post('/botHandler',function(req, res){			
 	console.log('req received');	
-	callHistory[req.body.conversation.conversationId] = 'end';
+	callHistory[req.body.conversation.conversationId] = 'idle';
 	var len = req.body.inputs.length;
 	var response = JSON.parse(JSON.stringify(config.responseObj));					
 	for(i=0; i<len; i++){		
@@ -136,7 +135,7 @@ router.post('/botHandler',function(req, res){
 			.then(function(resp){
 				for(l=0;l<resp.result.fulfillment.messages.length;l++){
 					message = resp.result.fulfillment.messages[l];
-				//resp.result.fulfillment.messages.forEach(function(message){		
+					//resp.result.fulfillment.messages.forEach(function(message){		
 					if(resp.result.metadata.intentName == 'customerFindReq'&&callHistory[resp.sessionId] != 'end'){
 						message.textToSpeech = config.waitResponses[callHistory[resp.sessionId]];
 					}						
@@ -197,7 +196,6 @@ var dialogflowAPI = function(input, sessId){
 		});			
 	});
 }
-
 
 
 var simpleResponse = function(response, responseText){

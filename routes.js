@@ -137,6 +137,7 @@ router.post('/botHandler',function(req, res){
 					message = resp.result.fulfillment.messages[l];
 					//resp.result.fulfillment.messages.forEach(function(message){		
 					if(resp.result.metadata.intentName == 'customerFindReq'&&callHistory[resp.sessionId] != 'end'){
+						console.log(callHistory[resp.sessionId],JSON.stringify(callHistory));
 						message.textToSpeech = config.waitResponses[callHistory[resp.sessionId]];
 					}						
 					if(message.platform=='google'&&message.type=="simple_response"){						

@@ -25,7 +25,7 @@ router.get('/', function(req, res) {
 
 router.get('/reply',function(req, res){
 	const response = new VoiceResponse();
-	console.log('req.query',req.query.SpeechResult);
+	console.log('req.query',req.query.SpeechResult,'callHistory',callHistory[req.query.cid]);
 	
 	//var txt = q.SpeechResult.replace(/[+]/,' ');
 	//console.log('text',txt);
@@ -85,7 +85,7 @@ router.get('/answer',function(req, res){
 	console.log(req.query.SpeechResult);
 	
 	gather.say(req.query.SpeechResult,{voice: 'woman'});	
-	response.redirect({method:'GET'},'https://fast-reef-26757.herokuapp.com/answer?SpeechResult='+encodeURIComponent("are you there ")+'&cid='+req.query.cid);
+	response.redirect({method:'GET'},'https://fast-reef-26757.herokuapp.com/answer?SpeechResult='+encodeURIComponent("are you there?")+'&cid='+req.query.cid);
 	//gather.say(botRep[req.query.textResult],{ voice: 'alice' });	
 	res.writeHead(200, { 'Content-Type': 'text/xml' });
     res.end(response.toString());

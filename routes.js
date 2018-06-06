@@ -125,7 +125,9 @@ router.get('/event',function(req, res){
 
 router.post('/botHandler',function(req, res){			
 	console.log('req received');	
-	callHistory[req.body.conversation.conversationId] = 'idle';
+	if(typeof(callHistory[req.body.conversation.conversationId])=='undefined'){
+		callHistory[req.body.conversation.conversationId] = 'idle';
+	}
 	var len = req.body.inputs.length;
 	var response = JSON.parse(JSON.stringify(config.responseObj));					
 	for(i=0; i<len; i++){		

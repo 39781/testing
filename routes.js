@@ -74,6 +74,7 @@ router.get('/answer',function(req, res){
         res.send(twimlResponse.toString());*/    
 		callHistory[req.query.cid] = 'inCall';
 	const gather = response.gather({
+	const gather = response.gather({
 	  input: 'speech dtmf',	  
 	  numDigits: 1,	  
 	  hints:"word, a phrase, another longer phrase, term, thing, proper product name",

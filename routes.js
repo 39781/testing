@@ -72,8 +72,7 @@ router.get('/answer',function(req, res){
 	twimlResponse.dial(salesNumber);
 	
         res.send(twimlResponse.toString());*/    
-		callHistory[req.query.cid] = 'inCall';
-	const gather = response.gather({
+		callHistory[req.query.cid] = 'inCall';	
 	const gather = response.gather({
 	  input: 'speech dtmf',	  
 	  numDigits: 1,	  
